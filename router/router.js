@@ -3,6 +3,7 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 const verifikasi = require('../middleware/verifikasi')
 const user = require('../controller/User')
+const artikel = require('../controller/Artikel')
 
 
 //menu regis n login
@@ -20,5 +21,9 @@ router.post('/adduser', user.addOneData);
 router.delete('/deleteuser', user.deleteOneData);
 router.put('/edituser', user.editOneData);
 
+
+
+router.get('/getAllArticle', artikel.getAllData );
+router.post('/addArticle', artikel.addOneData );
 
 module.exports = router;
