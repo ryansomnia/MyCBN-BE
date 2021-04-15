@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 let response = require('../res/res');
 let connection = require('../config/connection');
 // const fs = require('fs')
@@ -55,50 +55,51 @@ let addOneData = (req, res) => {
 }
 
 
-let deleteOneData = (req, res) => {
-    let id = req.body.id
+// let deleteOneData = (req, res) => {
+//     let id = req.body.id
 
-    let qry = `DELETE FROM user WHERE userName = '${id}'`
+//     let qry = `DELETE FROM artikel WHERE  = '${id}'`
 
-    connection.query(qry, (error, result) => {
-        if (error) {
-            console.log(error);
-        } else {
-            response.ok('Data berhasil terhapus', res)
-            console.log(result.affectedRows, 'Data berhasil terhapus');
+//     connection.query(qry, (error, result) => {
+//         if (error) {
+//             console.log(error);
+//         } else {
+//             response.ok('Data berhasil terhapus', res)
+//             console.log(result.affectedRows, 'Data berhasil terhapus');
 
-        }
-    })
+//         }
+//     })
 
-}
-let editOneData = (req, res) => {
-    let id = req.body.id
+// }
 
-    let nama = req.body.nama,
-        userName = req.body.userName,
-        password = req.body.password,
-        tglLahir = Date.now,
-        jk = req.body.jk
+// let editOneData = (req, res) => {
+//     let id = req.body.id
 
-    let qry = `UPDATE user 
-    SET nama = '${nama}',
-    userName = '${userName}',
-    password = '${password}',
-    tglLahir = '${tglLahir}',
-    jk = '${jk}'
-     WHERE idUser = '${id}'`
+//     let nama = req.body.nama,
+//         userName = req.body.userName,
+//         password = req.body.password,
+//         tglLahir = Date.now,
+//         jk = req.body.jk
 
-    connection.query(qry, (error, result) => {
-        if (error) {
-            console.log(error);
-        } else {
-            response.ok('Data berhasil diubah', res)
-            console.log(result.affectedRows, 'Data berhasil diubah');
+//     let qry = `UPDATE user 
+//     SET nama = '${nama}',
+//     userName = '${userName}',
+//     password = '${password}',
+//     tglLahir = '${tglLahir}',
+//     jk = '${jk}'
+//      WHERE idUser = '${id}'`
 
-        }
-    })
+//     connection.query(qry, (error, result) => {
+//         if (error) {
+//             console.log(error);
+//         } else {
+//             response.ok('Data berhasil diubah', res)
+//             console.log(result.affectedRows, 'Data berhasil diubah');
 
-}
+//         }
+//     })
+
+// }
 
 
 
