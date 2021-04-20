@@ -2,6 +2,18 @@
 let response = require('../res/res');
 let connection = require('../config/connection');
 
+// send email
+function sendEmail(res) {
+    let qry = 'SELECT * FROM user';
+   connection.query(qry, (error, result) => {
+        if (error) {
+            console.log(error);
+        } else {
+          console.log(result);
+        }
+    })
+  }
+  
 
 let getAllData = (req, res) => {
 
@@ -120,6 +132,7 @@ module.exports = {
     done,
     addOneData,
     deleteOneData,
-    editOneData
+    editOneData,
+    sendEmail
 
 }

@@ -106,7 +106,7 @@ let addOneData = (req, res) => {
 module.exports = {
     getAllData,
     addOneData,
-    deleteOneData,
-    editOneData
+    // deleteOneData,
+    // editOneData
 
 }
