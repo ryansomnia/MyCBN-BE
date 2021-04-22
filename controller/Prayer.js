@@ -1,4 +1,4 @@
- 'use strict';
+'use strict';
 let response = require('../res/res');
 let connection = require('../config/connection');
 // const fs = require('fs')
@@ -7,6 +7,8 @@ const multer = require('multer')
 const upload = multer({dest: 'image/'})
 var base64 = require('base-64');
 var utf8 = require('utf8');
+
+const moment = require('moment');
  
 // var text = 'foo © bar 𝌆 baz';
 // var bytes = utf8.encode(text);
@@ -15,7 +17,7 @@ var utf8 = require('utf8');
 
 let getAllData = (req, res) => {
 
-   let qry = 'SELECT * FROM artikel';
+   let qry = 'SELECT * FROM listdoa';
    connection.query(qry, (error, result, rows) => {
     if (error) {
         console.log(error);
@@ -27,23 +29,12 @@ let getAllData = (req, res) => {
 
 }
 
-let getAllRenungan = (req, res) => {
 
-    let qry = 'SELECT * FROM artikel WHERE kodeSegment = "R1"';
-    connection.query(qry, (error, result, rows) => {
-     if (error) {
-         console.log(error);
-     } else {
-         response.ok(result, res)
-       console.log(result);
-     }
- })
- 
- }
+ let getbyUser = (req, res) => {
 
- let getAllNews = (req, res) => {
+    let nama = req.body.nama
 
-    let qry = 'SELECT * FROM artikel WHERE kodeSegment = "N1"';
+    let qry = `SELECT * FROM listdoa WHERE nama = "${nama}"`;
     connection.query(qry, (error, result, rows) => {
      if (error) {
          console.log(error);
@@ -59,23 +50,23 @@ let getAllRenungan = (req, res) => {
 let addOneData = (req, res) => {
     
     let {
-        kodeSegment,
-        judul,
-        isiArtikel,
-        image
+       nama,
+       noHP,
+       isiDoa
     } = req.body
 // let dateCreated =  Date.now
+let waktuRequest = moment().format("YYYY-MM-DD")
+
 
          try {
-            let qry = `INSERT INTO artikel (kodeSegment, judul, image, isiArtikel, dateCreated) 
-            VALUES('${kodeSegment}', '${judul}', '${image}', '${isiArtikel}', '(SELECT CURDATE())')`
+            let qry = `INSERT INTO listdoa (nama, noHP, waktuRequest, isiDoa) 
+            VALUES('${nama}', '${noHP}', '${waktuRequest}', '${isiDoa}')`
         
             connection.query(qry, (error, rows, result) => {
                 if (error) {
                     console.log(error);
                 } else {
                     response.ok(result, res)
-                    // kita bereskan besok wkwkwk
                     console.log(result,'Data berhasil ditambahkan');
                  
                 }
@@ -88,9 +79,9 @@ let addOneData = (req, res) => {
 
 
 let deleteOneData = (req, res) => {
-    let id = req.body.id
+    let ID = req.body.ID
 
-    let qry = `DELETE FROM artikel WHERE  = '${id}'`
+    let qry = `DELETE FROM listdoa WHERE  = '${ID}'`
 
     connection.query(qry, (error, result) => {
         if (error) {
@@ -104,45 +95,10 @@ let deleteOneData = (req, res) => {
 
 }
 
-let editOneData = (req, res) => {
-    let id = req.body.id
-
-    let {
-        kodeSegment,
-        judul,
-        isiArtikel,
-
-    } = req.body 
-
-
-    let qry = `UPDATE user 
-    SET nama = '${nama}',
-    userName = '${userName}',
-    password = '${password}',
-    tglLahir = '${tglLahir}',
-    jk = '${jk}'
-     WHERE idUser = '${id}'`
-
-    connection.query(qry, (error, result) => {
-        if (error) {
-            console.log(error);
-        } else {
-            response.ok('Data berhasil diubah', res)
-            console.log(result.affectedRows, 'Data berhasil diubah');
-
-        }
-    })
-
-}
-
-
-
 module.exports = {
     getAllData,
-    getAllRenungan,
-    getAllNews,
+    getbyUser,
     addOneData,
-    deleteOneData,
-    editOneData
+    deleteOneData
 
 }

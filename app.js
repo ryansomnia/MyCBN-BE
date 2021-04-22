@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const app = express();
-
+const moment = require('moment');
 // const multer = require('multer');
 // const path = require('path');
 
@@ -36,5 +36,6 @@ app.use('/auth', require('./router/router'))
 
 app.listen(process.env.PORT, () => {
     console.log(`Server running in ${process.env.PORT}`);
-
+    // let dateCreated =  moment.
+    // console.log(dateCreated);
 })

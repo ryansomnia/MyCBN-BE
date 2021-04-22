@@ -4,6 +4,7 @@ const router = express.Router();
 const verifikasi = require('../middleware/verifikasi')
 const user = require('../controller/User')
 const artikel = require('../controller/Artikel')
+const doa = require('../controller/Prayer')
 const cron = require("node-cron");
 
 //menu regis n login
@@ -16,21 +17,37 @@ router.get('/api/v1/rahasia', verifikasi.verifikasi(), auth.halamanrahasia);
 router.get('/api/v1/admin', verifikasi.verifikasiAdmin(), auth.halamanAdmin);
 // formula rest (url, verivied sebagai?, crud)
 
+// API USER
 router.get('/getuser', user.getAllData);
 router.post('/adduser', user.addOneData);
 router.delete('/deleteuser', user.deleteOneData);
-router.put('/edituser', user.editOneData);
+router.post('/edituser', user.selectOneUser);
+router.post('/edituser', user.editOneUser);
 
-
-
+//API ARTIKEL
 router.get('/getAllArticle', artikel.getAllData );
-router.post('/addArticle', artikel.addOneData );
+router.post('/addOneArticle', artikel.addOneData );
+router.post('/editOneArticle', artikel.editOneData);
+router.delete('/deleteOneArticle', artikel.deleteOneData );
+
+// API GET Renungan
+router.get('/getAllRenungan', artikel.getAllRenungan );
+// API GET News
+router.get('/getAllNews', artikel.getAllNews );
+
+//API DOA
+router.get('/getAllDoa', doa.getAllData );
+router.post('/addOneDoa', doa.addOneData );
+router.post('/getDoabyUser', doa.getbyUser);
+router.delete('/deleteOneDoa', doa.deleteOneData);
+
+
 
 //CRON
-cron.schedule('* * * * *', () => {
-    console.log('Notifikasi OTP email : running a task every 1 minute  : ' + new Date().toISOString());
-    user.sendEmail();
-});
+// cron.schedule('* * * * *', () => {
+//     console.log('Notifikasi OTP email : running a task every 1 minute  : ' + new Date().toISOString());
+//     user.sendEmail();
+// });
 
 
 

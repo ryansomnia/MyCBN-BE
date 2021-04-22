@@ -79,22 +79,41 @@ let deleteOneData = (req, res) => {
     })
 
 }
-let editOneData = (req, res) => {
-    let id = req.body.id
+let selectOneUser = (req, res) => {
+    let idUser = req.body.idUser
 
-    let nama = req.body.nama,
-        userName = req.body.userName,
-        password = req.body.password,
-        tglLahir = Date.now,
-        jk = req.body.jk
+let show = `SELECT * FROM user WHERE idUser = '${idUser}'`;
+connection.query(show, (error, result, rows) => {
+    if (error) {
+        console.log(error);
+    } else {
+        response.ok(result, res)
+      console.log(result);
+    }
+})
+}
+let editOneUser = (req, res) => {
+let { 
+    idUser,
+    nama, 
+    password, 
+email,
+tglLahir,
+alamat,
+NoHP,
+jenisKelamin,
+image} = req.body 
 
     let qry = `UPDATE user 
     SET nama = '${nama}',
-    userName = '${userName}',
     password = '${password}',
+    email = '${email}',
     tglLahir = '${tglLahir}',
-    jk = '${jk}'
-     WHERE idUser = '${id}'`
+    alamat = '${alamat}',
+    NoHP = '${NoHP}',
+    jenisKelamin = '${jenisKelamin}'
+    image = '${image}'
+     WHERE idUser = '${idUser}'`
 
     connection.query(qry, (error, result) => {
         if (error) {
@@ -107,32 +126,15 @@ let editOneData = (req, res) => {
     })
 
 }
-let done = (req, res) => {
-
-    connection.query(`SELECT user.nama, schedule.book, schedule.chapterA, schedule.chapterB, schedule.date, agenda.status
-    FROM agenda 
-    JOIN user
-    JOIN schedule
-    WHERE agenda.idUser = user.idUser
-    AND agenda.idSchedule = schedule.idSchedule
-    AND agenda.status = 'done'`, (error, rows, fields) => {
-        if (error) {
-            console.log(error);
-        } else {
-            response.ok(rows, res)
-            console.log(rows);
-        }
-    })
-
-}
+ 
 
 
 module.exports = {
     getAllData,
-    done,
     addOneData,
     deleteOneData,
-    editOneData,
+    selectOneUser,
+    editOneUser,
     sendEmail
 
 }
