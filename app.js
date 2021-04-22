@@ -5,12 +5,22 @@ const app = express();
 const moment = require('moment');
 // const multer = require('multer');
 // const path = require('path');
+const cors = require('cors');
+
+//setting cors
+app.options('*', cors());
+
+
+
 
 let dotenv = require('dotenv');
 let env = dotenv.config();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+
+app.use(cors());
 
 app.use(morgan('dev'));
 
