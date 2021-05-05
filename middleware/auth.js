@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/secret');
 const ip = require('ip');
 const moment = require('moment');
+const Joi = require('joi');
 
 let today = moment().format('YYYY-MM-DD');
 
@@ -20,36 +21,44 @@ exports.registrasi = function (req, res) {
         tglLahir: req.body.tglLahir,
         alamat: req.body.alamat,
         kka: req.body.KKA,
-        noHP: req.body.noHP,
+        NoHP: req.body.NoHP,
         jenisKelamin: req.body.jenisKelamin
     }
+    // if (data.nama.length == "") {
+               
+    //     response.empytvalue("nama",res);   
+    // }
 
+
+    
     let query = `SELECT email FROM user WHERE email = '${data.email}'`;
 
     connection.query(query, function (error, rows) {
         if (error) {
             console.log(error);
-        } else {
+         } else {
             if (rows.length == 0) {
-                let query = `INSERT INTO user (nama, userName, password, role, email, tglRegis, tglLahir, alamat, kka, noHP, jenisKelamin ) 
+                let query = `INSERT INTO user (nama, userName, password, role, email, tglRegis, tglLahir, alamat, kka, NoHP, jenisKelamin ) 
     VALUES('${data.nama}', '${data.username}', '${data.password}', '${data.role}', '${data.email}', '${data.tglRegis}', 
     '${data.tglLahir}',
     '${data.alamat}',
     '${data.kka}',
-    '${data.noHP}',
+    '${data.NoHP}',
     '${data.jenisKelamin}')`
 
                 connection.query(query, function (error, rows) {
                     if (error) {
                         console.log(error);
+                     
                     } else {
                         response.ok("Berhasil menambahkan user", res)
+                        console.log("Berhasil menambahkan user");
                     }
 
                 })
             } else {
-                response.ok("Email sudah terdaftar", res);
-
+                 response.ok("Email sudah terdaftar", res);
+                //  response.ok("Gagal mendaftar", res);
             }
         }
     })
@@ -85,7 +94,7 @@ exports.login = function (req, res) {
                     tglLahir: rows[0].tglLahir,
                     alamat: rows[0].alamat,
                     kka: rows[0].KKA,
-                    noHP: rows[0].noHP,
+                    NoHP: rows[0].NoHP,
                     jenisKelamin: rows[0].jenisKelamin
 
                 }
@@ -109,7 +118,7 @@ exports.login = function (req, res) {
                             tglLahir: data.tglLahir,
                             alamat: data.alamat,
                             kka: data.kka,
-                            noHP: data.noHP,
+                            NoHP: data.NoHP,
                             jenisKelamin: data.jenisKelamin
 
 

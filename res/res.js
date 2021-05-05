@@ -12,7 +12,7 @@ exports.ok = (values, res) => {
 exports.empytvalue = (values, res) => {
     let data = {
         'status': 500,
-        'values': 'data parameter or req is empty'
+        'values': `${values}data parameter or req is empty`
     };
     res.json(data);
     res.end();
@@ -25,3 +25,4 @@ exports.wrongvalue = (values, res) => {
     res.json(data);
     res.end();
 }
+
