@@ -12,7 +12,6 @@ app.options('*', cors());
 
 
 
-
 let dotenv = require('dotenv');
 let env = dotenv.config();
 
@@ -38,7 +37,6 @@ app.use(morgan('dev'));
 
 app.use('/', require('./router/router'))
 app.use('/auth', require('./router/router'))
-
 
 
 

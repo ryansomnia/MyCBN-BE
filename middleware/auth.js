@@ -13,7 +13,7 @@ exports.registrasi = function (req, res) {
     let data = {
         nama: req.body.nama,
         username: req.body.username,
-        password: md5(req.body.password),
+        password: req.body.password,
         role: req.body.role,
         email: req.body.email,
         tglRegis: today,
@@ -60,10 +60,12 @@ exports.registrasi = function (req, res) {
 
 exports.login = function (req, res) {
     let {
+        email,
         password,
-        email
     } = req.body;
-    let query = `SELECT * FROM user WHERE password = '${md5(password)}' AND email = '${email}'`;
+    let query = `SELECT * FROM user WHERE email = '${email}' AND password = '${password}' `;
+    console.log(password);
+    console.log(query);
     connection.query(query, function (error, rows) {
         if (error) {
             console.log(error);
@@ -115,7 +117,9 @@ exports.login = function (req, res) {
                     }
 
                 });
-            } else {
+            } 
+           
+            else {
                 res.json({
                     "Error": true,
                     "Message": "Email atau password salah"

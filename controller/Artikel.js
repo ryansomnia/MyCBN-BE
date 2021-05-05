@@ -1,12 +1,9 @@
  'use strict';
 let response = require('../res/res');
 let connection = require('../config/connection');
-// const fs = require('fs')
-// const base64 = fs.readFileSync("path-to-image.jpg", "base64");
-const multer = require('multer')
-const upload = multer({dest: 'image/'})
-var base64 = require('base-64');
-var utf8 = require('utf8');
+
+const upload = require('./../helpers/image-upload')
+
  
 // var text = 'foo © bar 𝌆 baz';
 // var bytes = utf8.encode(text);
@@ -62,8 +59,9 @@ let addOneData = (req, res) => {
         kodeSegment,
         judul,
         isiArtikel,
-        image
     } = req.body
+
+    let image = req.file.image
 // let dateCreated =  Date.now
 
          try {
