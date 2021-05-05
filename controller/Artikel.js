@@ -51,7 +51,44 @@ let getAllRenungan = (req, res) => {
  })
  
  }
+ let getOneRenungan = (req, res) => {
+    let id = req.body.id;
+    
+    let qry = `SELECT * FROM artikel WHERE idartikel = '${id}' AND kodeSegment = 'R1' `;
+    connection.query(qry, (error, result, rows) => {
+        console.log(result);
+     if (error) {
+         console.log(error);
 
+        } else if (id == null){
+            response.empytvalue(result, res)
+            console.log(res);
+
+            } else if (result.length <= 1){
+                response.wrongvalue(result, res)
+                console.log(res);
+
+                }else { 
+                    response.ok(result, res)
+                    console.log(result);
+                }
+ })
+ 
+ }
+ let getOneNews = (req, res) => {
+    let id = req.body.id;
+    
+    let qry = `SELECT * FROM artikel WHERE idartikel = '${id}' AND kodeSegment = 'N1' `;
+    connection.query(qry, (error, result, rows) => {
+     if (error) {
+         console.log(error);
+     } else {
+         response.ok(result, res)
+       console.log(result);
+     }
+ })
+ 
+ }
 
 let addOneData = (req, res) => {
     
@@ -139,6 +176,8 @@ module.exports = {
     getAllData,
     getAllRenungan,
     getAllNews,
+    getOneRenungan,
+    getOneNews,
     addOneData,
     deleteOneData,
     editOneData

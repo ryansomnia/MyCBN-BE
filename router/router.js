@@ -32,8 +32,11 @@ router.delete('/deleteOneArticle', artikel.deleteOneData );
 
 // API GET Renungan
 router.get('/getAllRenungan', artikel.getAllRenungan );
+router.post('/getOneRenungan', artikel.getOneRenungan );
 // API GET News
 router.get('/getAllNews', artikel.getAllNews );
+router.post('/getOneNews', artikel.getOneNews );
+
 
 //API DOA
 router.get('/getAllDoa', doa.getAllData );
