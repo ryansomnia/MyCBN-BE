@@ -1,19 +1,9 @@
 'use strict';
 let response = require('../res/res');
 let connection = require('../config/connection');
-// const fs = require('fs')
-// const base64 = fs.readFileSync("path-to-image.jpg", "base64");
-const multer = require('multer')
-const upload = multer({dest: 'image/'})
-var base64 = require('base-64');
-var utf8 = require('utf8');
-
+const Joi = require('joi')
 const moment = require('moment');
  
-// var text = 'foo © bar 𝌆 baz';
-// var bytes = utf8.encode(text);
-// var encoded = base64.encode(bytes);
-// console.log(encoded);
 
 let getAllData = (req, res) => {
 
@@ -48,13 +38,53 @@ let getAllData = (req, res) => {
 
 
 let addOneData = (req, res) => {
-    
-    let {
-       nama,
-       noHP,
-       isiDoa
+
+ let{
+    nama,
+    noHP ,
+    isiDoa
     } = req.body
-// let dateCreated =  Date.now
+
+
+   if (nama.length == 0) {
+            let ress = {
+                status: 'error',
+                error: 'data nama kosong',
+            }
+
+            res.send(ress);
+            return;
+        }
+
+
+    if (noHP.length == 0) {
+            let ress = {
+                status: 'error',
+                error: 'data nomor HP kosong',
+            }
+
+            res.send(ress);
+            return;
+        }
+        
+    if (response.checknumber(noHP)) {
+            let ress = {
+                status: 'error',
+                error: 'No HP Invalid, No HP bercampur alphanumeric / angka dan huruf',
+            }
+            res.send(ress);
+            return;
+        }
+    if (isiDoa.length == 0) {
+            let ress = {
+                status: 'error',
+                error: 'isi doa kosong',
+            }
+
+            res.send(ress);
+            return;
+        }
+
 let waktuRequest = moment().format("YYYY-MM-DD")
 
 
@@ -67,7 +97,7 @@ let waktuRequest = moment().format("YYYY-MM-DD")
                     console.log(error);
                 } else {
                     response.ok(result, res)
-                    console.log(result,'Data berhasil ditambahkan');
+                    console.log(`Data ${nama} berhasil ditambahkan`);
                  
                 }
             })
