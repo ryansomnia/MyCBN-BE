@@ -45,6 +45,58 @@ NoHP,
 jenisKelamin,
 image} = req.body 
 
+if (nama.length == 0) {
+    let ress = {
+        status: 'error',
+        error: 'data nama kosong',
+    }
+
+    res.send(ress);
+    return;
+}
+
+            if (userName.length == 0) {
+                    let ress = {
+                        status: 'error',
+                        error: 'data userName kosong',
+                    }
+
+                    res.send(ress);
+                    return;
+            } else if (userName.length > 4) {
+                    let ress = {
+                        status: 'error',
+                        error: 'data username harus lebih dari 4 karakter',
+                    }
+
+                    res.send(ress);
+                    return;
+
+            }
+        
+
+        if (password.length == 0) {
+                let ress = {
+                    status: 'error',
+                    error: 'data password kosong',
+                }
+
+                res.send(ress);
+                return;
+        } else if (password.length > 8) {
+                let ress = {
+                    status: 'error',
+                    error: 'password harus lebih dari 8 karakter',
+                }
+
+                res.send(ress);
+                return;
+
+        }
+
+
+
+
 
 
     let tglRegis = Date.now
