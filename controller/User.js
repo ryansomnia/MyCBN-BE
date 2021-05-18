@@ -3,35 +3,42 @@ const response = require('../res/res');
 const connection = require('../config/connection');
 const nodemailer = require('nodemailer');
 
-let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'laskarimmanuel@gmail.com',
-        pass: 'sitorus2371'
-    }
-});
 
-var mailOptions = {
-    from: 'laskarimmanuel@gmail.com',
-    to: 'fernandoosilaban@gmail.com',
-    subject: 'Verivikasi email',
-    text: 'silahkan klik link ini untuk validasi akun anda updateVerivikasiAkun '
-};
 
 // send email
 function sendEmailverivikasiAkun (res) {
-    let query = `SELECT TOP 1 email FROM user WHERE verify = '2'`;
+    let query = `SELECT email FROM user WHERE verify = '2' LIMIT 1 `;
     // 1 = sukses
     // 2 = pending
-   connection.query(query, (error, rows) => {
+   connection.query(query, (error, rows, result) => {
         if (error) {
             console.log(error);
         } else {
             if (rows.length > 0) {
+
+                let email =  rows[0].email;
+                
+                let transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: 'laskarimmanuel@gmail.com',
+                        pass: 'sitorus2371'
+                    }
+                });
+                
+                var mailOptions = {
+                    from: 'laskarimmanuel@gmail.com',
+                    to: `${email}`,
+                    subject: 'Verivikasi email',
+                    text: `silahkan klik link ini untuk validasi akun anda https://slh1m.sse.codesandbox.io/updateVerivikasiAkun?email=${email}`
+                };
+
                 transporter.sendMail(mailOptions, (err, info) => {
                     if (err) throw err;
                     console.log('Email sent: ' + info.response);
                 });
+                // response.ok('Data berhasil diubah', res)
+               
                 
                 // let update = `UPDATE user 
                 // SET verify = '1',

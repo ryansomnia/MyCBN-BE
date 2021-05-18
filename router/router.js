@@ -52,7 +52,7 @@ cron.schedule('* * * * *', () => {
     user.sendEmailverivikasiAkun();
 });
 
-router.post('/updateVerivikasiAkun',user.updateVerivikasiAkun);
+router.get('/updateVerivikasiAkun',user.updateVerivikasiAkun);
 
 
 module.exports = router;
