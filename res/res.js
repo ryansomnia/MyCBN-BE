@@ -19,11 +19,21 @@ exports.checknumber = (data) => {
     }
 }
 
+exports.validateEmail = (data) => {
+    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 
+    if (!reg.test(data)) 
+    {
+        return true
+    } else {
+        return false
+    }
+
+}
 
 exports.empytvalue = (values, res) => {
     let data = {
-        'status': 422,
+        'status': 200,
         'values': `${values}data parameter or req is empty`
     };
     res.json(data);

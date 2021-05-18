@@ -46,12 +46,13 @@ router.delete('/deleteOneDoa', doa.deleteOneData);
 
 
 
-//CRON
-// cron.schedule('* * * * *', () => {
-//     console.log('Notifikasi OTP email : running a task every 1 minute  : ' + new Date().toISOString());
-//     user.sendEmail();
-// });
+// CRON
+cron.schedule('* * * * *', () => {
+    console.log('Notifikasi OTP email : running a task every 1 minute  : ' + new Date().toISOString());
+    user.sendEmailverivikasiAkun();
+});
 
+router.post('/updateVerivikasiAkun',user.updateVerivikasiAkun);
 
 
 module.exports = router;

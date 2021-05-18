@@ -1,19 +1,66 @@
 'use strict';
-let response = require('../res/res');
-let connection = require('../config/connection');
+const response = require('../res/res');
+const connection = require('../config/connection');
+const nodemailer = require('nodemailer');
+
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'laskarimmanuel@gmail.com',
+        pass: 'sitorus2371'
+    }
+});
+
+var mailOptions = {
+    from: 'laskarimmanuel@gmail.com',
+    to: 'fernandoosilaban@gmail.com',
+    subject: 'Verivikasi email',
+    text: 'silahkan klik link ini untuk validasi akun anda updateVerivikasiAkun '
+};
 
 // send email
-function sendEmail(res) {
-    let qry = 'SELECT * FROM user';
-   connection.query(qry, (error, result) => {
+function sendEmailverivikasiAkun (res) {
+    let query = `SELECT TOP 1 email FROM user WHERE verify = '2'`;
+    // 1 = sukses
+    // 2 = pending
+   connection.query(query, (error, rows) => {
         if (error) {
             console.log(error);
         } else {
-          console.log(result);
+            if (rows.length > 0) {
+                transporter.sendMail(mailOptions, (err, info) => {
+                    if (err) throw err;
+                    console.log('Email sent: ' + info.response);
+                });
+                
+                // let update = `UPDATE user 
+                // SET verify = '1',
+                //  WHERE idUser = '${}'`
+            }
+        //   console.log(result);
         }
     })
   }
   
+  let updateVerivikasiAkun = (req, res) => {
+    let email = req.param.email
+
+    let qry = `UPDATE user 
+    SET verify = '1',
+     WHERE email = '${email}'`
+
+    connection.query(qry, (error, result) => {
+        if (error) {
+            console.log(error);
+        } else {
+            response.ok('Data berhasil diubah', res)
+            console.log(result.affectedRows, 'Data berhasil diubah');
+
+        }
+    })
+
+}
+
 
 let getAllData = (req, res) => {
 
@@ -33,27 +80,27 @@ let getAllData = (req, res) => {
 
 
 let addOneData = (req, res) => {
-    let { nama, 
-        userName, 
-        password, 
-        role,
-    email,
-tglLahir,
-alamat,
-KKA,
-NoHP,
-jenisKelamin,
-image} = req.body 
+     let { nama, 
+            userName, 
+            password, 
+            role,
+            email,
+            tglLahir,
+            alamat,
+            KKA,
+            NoHP,
+            jenisKelamin,
+            image} = req.body 
 
-if (nama.length == 0) {
-    let ress = {
-        status: 'error',
-        error: 'data nama kosong',
-    }
+            if (nama.length == 0) {
+                let ress = {
+                    status: 'error',
+                    error: 'data nama kosong',
+                }
 
-    res.send(ress);
-    return;
-}
+                res.send(ress);
+                return;
+            }
 
             if (userName.length == 0) {
                     let ress = {
@@ -83,7 +130,7 @@ if (nama.length == 0) {
 
                 res.send(ress);
                 return;
-        } else if (password.length > 8) {
+         } else if (password.length > 8) {
                 let ress = {
                     status: 'error',
                     error: 'password harus lebih dari 8 karakter',
@@ -145,27 +192,27 @@ connection.query(show, (error, result, rows) => {
 })
 }
 let editOneUser = (req, res) => {
-let { 
-    idUser,
-    nama, 
-    password, 
-email,
-tglLahir,
-alamat,
-NoHP,
-jenisKelamin,
-image} = req.body 
+        let { 
+            idUser,
+            nama, 
+            password, 
+        email,
+        tglLahir,
+        alamat,
+        NoHP,
+        jenisKelamin,
+        image} = req.body 
 
-    let qry = `UPDATE user 
-    SET nama = '${nama}',
-    password = '${password}',
-    email = '${email}',
-    tglLahir = '${tglLahir}',
-    alamat = '${alamat}',
-    NoHP = '${NoHP}',
-    jenisKelamin = '${jenisKelamin}'
-    image = '${image}'
-     WHERE idUser = '${idUser}'`
+                let qry = `UPDATE user 
+                SET nama = '${nama}',
+                password = '${password}',
+                email = '${email}',
+                tglLahir = '${tglLahir}',
+                alamat = '${alamat}',
+                NoHP = '${NoHP}',
+                jenisKelamin = '${jenisKelamin}'
+                image = '${image}'
+                WHERE idUser = '${idUser}'`
 
     connection.query(qry, (error, result) => {
         if (error) {
@@ -180,6 +227,41 @@ image} = req.body
 }
  
 
+// let verivikasiAkun = function (req, res) {
+//     let email = req.body.email
+    
+
+//     let query = `SELECT * FROM user WHERE email = '${email}'`;
+
+// if valid = pending 
+// maka kirim email verivikasi 
+
+
+//     connection.query(query, function (error, rows) {
+//         if (error) {
+//             console.log(error);
+//          } else {
+//             if (rows.length == 0) {
+//                 let qry = `INSERT INTO user (nama, userName, password, role, email, tglRegis, tglLahir, alamat, kka, NoHP, jenisKelamin ) 
+//     VALUES('${data.nama}', '${data.username}', '${data.password}', 'user', '${data.email}', '${data.tglRegis}', 
+//             '${data.tglLahir}','${data.alamat}', '${data.kka}', '${data.NoHP}', '${data.jenisKelamin}')`
+
+//                 connection.query(qry, function (error, rows) {
+//                     if (error) {
+//                         console.log(error);
+                     
+//                     } else {
+//                         response.ok("Berhasil menambahkan user", res)
+//                         console.log("Berhasil menambahkan user");
+//                     }
+
+//                 })
+//             } else {
+//                  response.ok("Email sudah terdaftar", res);
+//             }
+//         }
+//     })
+// }
 
 module.exports = {
     getAllData,
@@ -187,6 +269,7 @@ module.exports = {
     deleteOneData,
     selectOneUser,
     editOneUser,
-    sendEmail
+    sendEmailverivikasiAkun,
+    updateVerivikasiAkun
 
 }
