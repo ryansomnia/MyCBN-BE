@@ -223,6 +223,32 @@ exports.login = function (req, res) {
         email,
         password,
     } = req.body;
+
+    if (email == ''  || email.length == null) {
+        let ress = {
+            status: '200',
+            message: 'error',
+            values: 'email tidak boleh kosong'
+        }
+
+        res.send(ress);
+        return;
+
+    }
+
+    if (password == ''  || password.length == null) {
+        let ress = {
+            status: '200',
+            message: 'error',
+            values: 'password tidak boleh kosong'
+        }
+
+        res.send(ress);
+        return;
+
+    }
+
+
     let query = `SELECT * FROM user WHERE email = '${email}' AND password = '${password}' `;
     console.log(password);
     console.log(query);

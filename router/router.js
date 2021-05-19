@@ -48,8 +48,11 @@ router.delete('/deleteOneDoa', doa.deleteOneData);
 
 //API KKA
 router.get('/getAllKKA', kka.getAllData );
+router.get('/getAllKKA', kka.getbyName );
+router.get('/getAllKKA', kka.getbyArea );
 router.post('/addOneKKA', kka.addOneData );
 router.delete('/deleteOneKKA', kka.deleteOneData);
+
 
 
 // CRON

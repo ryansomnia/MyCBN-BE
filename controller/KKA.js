@@ -20,7 +20,7 @@ let getAllData = (req, res) => {
 }
 
 
- let getbyUser = (req, res) => {
+ let getbyName = (req, res) => {
 
     let nama = req.body.nama
 
@@ -37,19 +37,42 @@ let getAllData = (req, res) => {
  }
 
 
+ let getbyArea = (req, res) => {
+
+    let area = req.body.area
+
+        let qry = `SELECT * FROM listkka WHERE area = "${area}"`;
+        connection.query(qry, (error, result, rows) => {
+        if (error) {
+            console.log(error);
+        } else {
+            response.ok(result, res)
+        console.log(result);
+        }
+    })
+ 
+ }
+
+
 let addOneData = (req, res) => {
 
  let{
     nama,
-    noHP ,
-    isiDoa
+    area,
+    ketua,
+    noHPKetua,
+    Pembimbing,
+    noHPPembimbing,
+    hari,
+    jam,
     } = req.body
 
 
    if (nama.length == 0) {
             let ress = {
-                status: 'error',
-                error: 'data nama kosong',
+                status: '200',
+                message: 'error',
+                values:'field nama kosong'
             }
 
             res.send(ress);
@@ -57,40 +80,122 @@ let addOneData = (req, res) => {
         }
 
 
-    if (noHP.length == 0) {
+    if (area.length == 0) {
             let ress = {
-                status: 'error',
-                error: 'data nomor HP kosong',
+                status: '200',
+                message: 'error',
+                values:'field area kosong'
             }
 
             res.send(ress);
             return;
         }
+
+    if (ketua.length == 0) {
+            let ress = {
+                status: '200',
+                message: 'error',
+                values:'field ketua kosong'
+            }
+
+            res.send(ress);
+            return;
+        }
+
+
+        if (noHPKetua.length == 0){
+
+            let ress = {
+
+                status: '200',
+                message: 'error',
+                values: 'field noHPKetua kosong'
+            }
+
+            res.send(ress);
+            return;
+            
+        } else if (response.checknumber(noHPKetua)) {
+            let ress = {
+
+                status: '200',
+                message: 'error',
+                values: 'No HP Ketua Invalid, No HP bercampur alphanumeric / angka dan huruf'
+            }
+            res.send(ress);
+            return;
+        }
+
+        if (Pembimbing.length == 0) {
+            let ress = {
+                status: '200',
+                message: 'error',
+                values: 'field Pembimbing kosong'
+            }
+
+            res.send(ress);
+            return;
+        }
+
+
+        if (noHPPembimbing.length == 0){
+
+            let ress = {
+                status: '200',
+                message: 'error',
+                values: 'field noHP Pembimbing kosong'
+            }
+
+            res.send(ress);
+            return;
+            
+        } else if (response.checknumber(noHPPembimbing)) {
+            let ress = {
+
+                status: '200',
+                message: 'error',
+                values: 'No HP Pembimbing Invalid, No HP bercampur alphanumeric / angka dan huruf'
+            
+            }
+            res.send(ress);
+            return;
+        }
+
+
         
-    if (response.checknumber(noHP)) {
+        if (hari.length == 0){
+
             let ress = {
-                status: 'error',
-                error: 'No HP Invalid, No HP bercampur alphanumeric / angka dan huruf',
-            }
-            res.send(ress);
-            return;
-        }
-    if (isiDoa.length == 0) {
-            let ress = {
-                status: 'error',
-                error: 'isi doa kosong',
+                status: '200',
+                message: 'error',
+                values: 'field hari kosong'
             }
 
             res.send(ress);
             return;
-        }
+            
+        } 
 
-let waktuRequest = moment().format("YYYY-MM-DD")
+        if (jam.length == 0){
+
+            let ress = {
+
+                status: '200',
+                message: 'error',
+                values: 'field jam kosong'
+            }
+
+            res.send(ress);
+            return;
+            
+        } 
+
+        
 
 
          try {
-            let qry = `INSERT INTO listkka (nama, noHP, waktuRequest, isiDoa) 
-            VALUES('${nama}', '${noHP}', '${waktuRequest}', '${isiDoa}')`
+            let qry = `INSERT INTO listkka ( nama, area, ketua, noHPKetua, Pembimbing, noHPPembimbing, hari, jam,) 
+            VALUES('${nama}', '${area}', '${ketua}', '${noHPKetua}', '${Pembimbing}', '${noHPPembimbing}', '${hari}', '${jam}')`
         
             connection.query(qry, (error, rows, result) => {
                 if (error) {
@@ -109,9 +214,9 @@ let waktuRequest = moment().format("YYYY-MM-DD")
 
 
 let deleteOneData = (req, res) => {
-    let ID = req.body.ID
+    let nama = req.body.nama
 
-    let qry = `DELETE FROM listkka WHERE  = '${ID}'`
+    let qry = `DELETE FROM listkka WHERE  nama = '${nama}'`
 
     connection.query(qry, (error, result) => {
         if (error) {
@@ -127,7 +232,8 @@ let deleteOneData = (req, res) => {
 
 module.exports = {
     getAllData,
-    getbyUser,
+    getbyName,
+    getbyArea,
     addOneData,
     deleteOneData
 
