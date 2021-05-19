@@ -47,10 +47,10 @@ router.delete('/deleteOneDoa', doa.deleteOneData);
 
 
 // CRON
-cron.schedule('* * * * *', () => {
-    console.log('Notifikasi OTP email : running a task every 1 minute  : ' + new Date().toISOString());
-    user.sendEmailverivikasiAkun();
-});
+// cron.schedule('* * * * *', () => {
+//     console.log('Notifikasi OTP email : running a task every 1 minute  : ' + new Date().toISOString());
+//     user.sendEmailverivikasiAkun();
+// });
 
 router.get('/updateVerivikasiAkun',user.updateVerivikasiAkun);
 

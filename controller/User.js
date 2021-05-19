@@ -17,7 +17,7 @@ function sendEmailverivikasiAkun (res) {
             if (rows.length > 0) {
 
                 let email =  rows[0].email;
-                
+
                 let transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
@@ -50,8 +50,8 @@ function sendEmailverivikasiAkun (res) {
   }
   
   let updateVerivikasiAkun = (req, res) => {
-    let email = req.param.email
-
+    let email = req.params.email
+console.log(email);
     let qry = `UPDATE user 
     SET verify = '1',
      WHERE email = '${email}'`
