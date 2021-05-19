@@ -5,6 +5,7 @@ const verifikasi = require('../middleware/verifikasi')
 const user = require('../controller/User')
 const artikel = require('../controller/Artikel')
 const doa = require('../controller/Prayer')
+const kka = require('../controller/KKA')
 const cron = require("node-cron");
 
 //menu regis n login
@@ -44,6 +45,11 @@ router.post('/addOneDoa', doa.addOneData );
 router.post('/getDoabyUser', doa.getbyUser);
 router.delete('/deleteOneDoa', doa.deleteOneData);
 
+
+//API KKA
+router.get('/getAllKKA', kka.getAllData );
+router.post('/addOneKKA', kka.addOneData );
+router.delete('/deleteOneKKA', kka.deleteOneData);
 
 
 // CRON
