@@ -33,7 +33,7 @@ exports.registrasi = function (req, res) {
 
             res.send(ress);
             return;
-        } else if (data.nama.length <= 50){
+        } else if (data.nama.length >= 50){
             let ress = {
                 status: '200',
                 message: 'error',
@@ -55,7 +55,7 @@ exports.registrasi = function (req, res) {
             res.send(ress);
             return;
 
-        } else if (data.username.length <= 50){
+        } else if (data.username.length >= 50){
             let ress = {
                 status: '200',
                 message: 'error',
@@ -77,7 +77,7 @@ exports.registrasi = function (req, res) {
             res.send(ress);
             return;
 
-        } else if (data.password.length <= 30){
+        } else if (data.password.length >= 30){
             let ress = {
                 status: '200',
                 message: 'error',
@@ -108,7 +108,7 @@ exports.registrasi = function (req, res) {
             res.send(ress);
             return;
 
-        } else if (data.email.length <= 30){
+        } else if (data.email.length >= 30){
             let ress = {
                 status: '200',
                 message: 'error',
@@ -145,7 +145,7 @@ exports.registrasi = function (req, res) {
 
         }
 
-        if (data.NoHP == ''  || data.NoHP.length == null) {
+        if (data.NoHP == ''  || data.NoHP == null) {
             let ress = {
                 status: '200',
                 message: 'error',
@@ -155,7 +155,7 @@ exports.registrasi = function (req, res) {
             res.send(ress);
             return;
 
-        } else if (data.NoHP.length <= 15){
+        } else if (data.NoHP.length >= 15){
             let ress = {
                 status: '200',
                 message: 'error',
@@ -195,7 +195,7 @@ exports.registrasi = function (req, res) {
          } else {
             if (rows.length == 0) {
                 let qry = `INSERT INTO user (nama, userName, password, role, email, tglRegis, tglLahir, alamat, kka, NoHP, jenisKelamin ) 
-    VALUES('${data.nama}', '${data.username}', '${data.password}', 'user', '${data.email}', '${data.tglRegis}', 
+    VALUES('${data.nama}', '${data.username}', '${md5(data.password)}', 'user', '${data.email}', '${data.tglRegis}', 
             '${data.tglLahir}','${data.alamat}', '${data.kka}', '${data.NoHP}', '${data.jenisKelamin}')`
 
                 connection.query(qry, function (error, rows) {
@@ -249,7 +249,7 @@ exports.login = function (req, res) {
     }
 
 
-    let query = `SELECT * FROM user WHERE email = '${email}' AND password = '${password}' `;
+    let query = `SELECT * FROM user WHERE email = '${email}' AND password = '${md5(password)}' `;
     console.log(password);
     console.log(query);
     connection.query(query, function (error, rows) {
