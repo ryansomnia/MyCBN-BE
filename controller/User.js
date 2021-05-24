@@ -2,6 +2,8 @@
 const response = require('../res/res');
 const connection = require('../config/connection');
 const nodemailer = require('nodemailer');
+const otpGenerator = require('otp-generator')
+ 
 
 
 
@@ -76,6 +78,61 @@ console.log(qry);
 
 }
 
+let sendOTP = (req, res) => {
+    let email = req.body.email
+   // let query = `SELECT email FROM user WHERE verify = '2' LIMIT 1 `;
+   // 1 = sukses
+   // 2 = pending
+//    connection.query(query, (error, rows, result) => {
+       // if (error) {
+       //     console.log(error);
+       // } else {
+           if (email.length > 0) {
+
+               // let email =  rows[0].email;
+        //        let link = { 
+        //            dev :`https://bemycbn.herokuapp.com/updateVerivikasiAkun/${email}`,
+        //            local : `http://localhost:5000/updateVerivikasiAkun/${email}`
+        //    }
+                let OTP = otpGenerator.generate(4, { upperCase: true, specialChars: false });
+ console.log(OTP);
+               let transporter = nodemailer.createTransport({
+                   service: 'gmail',
+                   auth: {
+                       user: 'mycbngppk@gmail.com',
+                       pass: 'mycbn5000'
+                   }
+               });
+               
+               var mailOptions = {
+                   from: 'mycbngppk@gmail.com',
+                   to: `${email}`,
+                   subject: 'Verivikasi OTP',
+                   text: `Kode OTP adalah : ${OTP}`
+                  
+               };
+
+               transporter.sendMail(mailOptions, (err, info) => {
+    
+                   if (err) {
+                       console.log(err);
+                   } else {
+                       res.send(info)
+                    console.log('Email terkirim: ' + info.response);
+                   }
+                   
+               });
+               // response.ok('Data berhasil diubah', res)
+              
+               
+               // let update = `UPDATE user 
+               // SET verify = '1',
+               //  WHERE idUser = '${}'`
+           }
+       //   console.log(result);
+       }
+   // })
+//   } 
 
 let getAllData = (req, res) => {
 
@@ -285,6 +342,7 @@ module.exports = {
     selectOneUser,
     editOneUser,
     sendEmailverivikasiAkun,
-    updateVerivikasiAkun
+    updateVerivikasiAkun,
+    sendOTP
 
 }

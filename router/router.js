@@ -66,7 +66,7 @@ router.delete('/deleteOneKKA', kka.deleteOneData);
 // });
 
 router.post('/sendEmailVerifikasi', user.sendEmailverivikasiAkun );
-
+router.post('/sendOTP', user.sendOTP );
 router.get('/updateVerivikasiAkun/:email',user.updateVerivikasiAkun);
 
 
