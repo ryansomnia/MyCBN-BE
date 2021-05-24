@@ -307,8 +307,9 @@ exports.login = function (req, res) {
            
             else {
                 res.json({
-                    "Error": true,
-                    "Message": "Email atau password salah"
+                    status: '200',
+                    message: 'error',
+                    values: 'Email atau password salah'
                 });
             }
         }
