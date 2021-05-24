@@ -285,7 +285,7 @@ exports.login = function (req, res) {
                     } else {
                         res.json({
                             success: true,
-                            message: "Token JWT tergernerate !",
+                            message: "Berhasil Login !",
                             token: token,
                             currUser: data.idUser,
                             nama: data.nama,

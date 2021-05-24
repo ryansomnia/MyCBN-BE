@@ -8,10 +8,12 @@ const artikel = require('../controller/Artikel')
 const doa = require('../controller/Prayer')
 const kka = require('../controller/KKA')
 const cron = require("node-cron");
+const { haltOnTimedout, errorFilter } = require('../helpers/connectTimeOut');
 
+var timeout=require('connect-timeout');
 //menu regis n login
 router.post('/api/v1/register', auth.registrasi);
-router.post('/api/v1/login', auth.login);
+router.post('/api/v1/login',timeout(3000),auth.login, haltOnTimedout, errorFilter);
 
 
 //alamat otorisasi
