@@ -3,6 +3,7 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 const verifikasi = require('../middleware/verifikasi')
 const user = require('../controller/User')
+const pastoral = require('../controller/Pastoral')
 const artikel = require('../controller/Artikel')
 const doa = require('../controller/Prayer')
 const kka = require('../controller/KKA')
@@ -24,6 +25,9 @@ router.post('/adduser', user.addOneData);
 router.delete('/deleteuser', user.deleteOneData);
 router.post('/edituser', user.selectOneUser);
 router.post('/edituser', user.editOneUser);
+//API Pastoral
+router.get('/pastoral', pastoral.getAllData);
+router.post('/OnePastoral', pastoral.getbyUser);
 
 //API ARTIKEL
 router.get('/getAllArticle', artikel.getAllData );
@@ -61,7 +65,9 @@ router.delete('/deleteOneKKA', kka.deleteOneData);
 //     user.sendEmailverivikasiAkun();
 // });
 
-router.get('/updateVerivikasiAkun',user.updateVerivikasiAkun);
+router.post('/sendEmailVerifikasi', user.sendEmailverivikasiAkun );
+
+router.get('/updateVerivikasiAkun/:email',user.updateVerivikasiAkun);
 
 
 module.exports = router;

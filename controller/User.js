@@ -6,17 +6,24 @@ const nodemailer = require('nodemailer');
 
 
 // send email
-function sendEmailverivikasiAkun (res) {
-    let query = `SELECT email FROM user WHERE verify = '2' LIMIT 1 `;
+// kenapa cron??
+
+ let sendEmailverivikasiAkun = (req, res) => {
+     let email = req.body.email
+    // let query = `SELECT email FROM user WHERE verify = '2' LIMIT 1 `;
     // 1 = sukses
     // 2 = pending
-   connection.query(query, (error, rows, result) => {
-        if (error) {
-            console.log(error);
-        } else {
-            if (rows.length > 0) {
+//    connection.query(query, (error, rows, result) => {
+        // if (error) {
+        //     console.log(error);
+        // } else {
+            if (email.length > 0) {
 
-                let email =  rows[0].email;
+                // let email =  rows[0].email;
+                let link = { 
+                    dev :`https://bemycbn.herokuapp.com/updateVerivikasiAkun/${email}`,
+                    local : `http://localhost:5000/updateVerivikasiAkun/${email}`
+            }
 
                 let transporter = nodemailer.createTransport({
                     service: 'gmail',
@@ -30,12 +37,13 @@ function sendEmailverivikasiAkun (res) {
                     from: 'laskarimmanuel@gmail.com',
                     to: `${email}`,
                     subject: 'Verivikasi email',
-                    text: `silahkan klik link ini untuk validasi akun anda https://slh1m.sse.codesandbox.io/updateVerivikasiAkun?email=${email}`
+                    text: `silahkan klik link ini untuk validasi akun anda ${link.local}`
+                   
                 };
 
                 transporter.sendMail(mailOptions, (err, info) => {
                     if (err) throw err;
-                    console.log('Email sent: ' + info.response);
+                    console.log('Email terkirim: ' + info.response);
                 });
                 // response.ok('Data berhasil diubah', res)
                
@@ -46,16 +54,16 @@ function sendEmailverivikasiAkun (res) {
             }
         //   console.log(result);
         }
-    })
-  }
+    // })
+//   }
   
   let updateVerivikasiAkun = (req, res) => {
     let email = req.params.email
 console.log(email);
     let qry = `UPDATE user 
-    SET verify = '1',
+    SET verify = '1'
      WHERE email = '${email}'`
-
+console.log(qry);
     connection.query(qry, (error, result) => {
         if (error) {
             console.log(error);
