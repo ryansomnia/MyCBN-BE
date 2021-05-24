@@ -26,7 +26,7 @@ exports.registrasi = function (req, res) {
     
         if (data.nama == ''  || data.nama.length == null) {
             let ress = {
-                status: '200',
+                status: '404',
                 message: 'error',
                 values: 'nama tidak boleh kosong'
             }
@@ -226,9 +226,9 @@ exports.login = function (req, res) {
 
     if (email == ''  || email.length == null) {
         let ress = {
-            status: '200',
-            message: 'error',
-            values: 'email tidak boleh kosong'
+            status: '404',
+            message: 'email tidak boleh kosong',
+            values: ''
         }
 
         res.send(ress);
@@ -238,9 +238,9 @@ exports.login = function (req, res) {
 
     if (password == ''  || password.length == null) {
         let ress = {
-            status: '200',
-            message: 'error',
-            values: 'password tidak boleh kosong'
+            status: '404',
+            message: 'password tidak boleh kosong',
+            values: ''
         }
 
         res.send(ress);
@@ -286,17 +286,19 @@ exports.login = function (req, res) {
                         res.json({
                             success: true,
                             message: "Berhasil Login !",
-                            token: token,
-                            currUser: data.idUser,
-                            nama: data.nama,
-                            username: data.username,
-                            role: data.role,
-                            email: data.email,
-                            tglLahir: data.tglLahir,
-                            alamat: data.alamat,
-                            kka: data.kka,
-                            NoHP: data.NoHP,
-                            jenisKelamin: data.jenisKelamin
+                            value : {
+                                    token: token,
+                                    currUser: data.idUser,
+                                    nama: data.nama,
+                                    username: data.username,
+                                    role: data.role,
+                                    email: data.email,
+                                    tglLahir: data.tglLahir,
+                                    alamat: data.alamat,
+                                    kka: data.kka,
+                                    NoHP: data.NoHP,
+                                    jenisKelamin: data.jenisKelamin
+                                    }
 
 
                         });

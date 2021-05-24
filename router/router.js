@@ -12,8 +12,8 @@ const { haltOnTimedout, errorFilter } = require('../helpers/connectTimeOut');
 
 var timeout=require('connect-timeout');
 //menu regis n login
-router.post('/api/v1/register', auth.registrasi);
-router.post('/api/v1/login',timeout(3000),auth.login, haltOnTimedout, errorFilter);
+router.post('/api/v1/register',timeout(5000), auth.registrasi, haltOnTimedout, errorFilter);
+router.post('/api/v1/login',timeout(5000),auth.login, haltOnTimedout, errorFilter);
 
 
 //alamat otorisasi
