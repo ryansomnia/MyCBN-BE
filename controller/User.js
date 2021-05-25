@@ -3,7 +3,8 @@ const response = require('../res/res');
 const connection = require('../config/connection');
 const nodemailer = require('nodemailer');
 const otpGenerator = require('otp-generator')
- 
+let dotenv = require('dotenv');
+let env = dotenv.config();
 
 
 
@@ -23,20 +24,20 @@ const otpGenerator = require('otp-generator')
 
                 // let email =  rows[0].email;
                 let link = { 
-                    dev :`https://bemycbn.herokuapp.com/updateVerivikasiAkun/${email}`,
-                    local : `http://localhost:5000/updateVerivikasiAkun/${email}`
+                    dev :`${process.env.link_dev}/${email}`,
+                    local : `${process.env.link_local}/${email}`
             }
 
                 let transporter = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
-                        user: 'laskarimmanuel@gmail.com',
-                        pass: 'sitorus2371'
+                        user: process.env.core_email,
+                        pass: process.env.core_pw_email
                     }
                 });
                 
                 var mailOptions = {
-                    from: 'laskarimmanuel@gmail.com',
+                    from: process.env.core_email,
                     to: `${email}`,
                     subject: 'Verivikasi email',
                     text: `silahkan klik link ini untuk validasi akun anda ${link.local}`
