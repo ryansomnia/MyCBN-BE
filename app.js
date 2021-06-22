@@ -6,6 +6,8 @@ const app = express();
 // const multer = require('multer');
 // const path = require('path');
 const cors = require('cors');
+const ejs = require('ejs');
+
 
 //setting cors
 app.options('*', cors());
@@ -18,6 +20,20 @@ let env = dotenv.config();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+
+//Static Files
+app.use(express.static('public'))
+app.use('/css', express.static(__dirname + 'public/css'))
+
+//Set Templating Engine
+app.set(ejs)
+app.set('view engine', 'ejs')
+
+
+// Navigation 
+app.get('', (req,res) => {
+    res.render('index')
+})
 
 app.use(cors());
 
