@@ -1,1 +1,16 @@
+# Node modules
 node_modules
+package-lock.json
+# Adonis directory for storing tmp files
+tmp
+logfile
+*.log
+
+Environment variables, never commit this file
+.env
+*.log
+*.png
+*.jpg
+*.jpeg
+docker-compose.yml
+Dockerfile

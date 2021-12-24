@@ -41,13 +41,14 @@ app.use(morgan('dev'));
 
 
 app.use('/', require('./router/router'))
-app.use('/auth', require('./router/router'))
 
+app.all('/cbn/v1/*', [require('./middleware/validationdev')]);
+// app.all('/myaccessapi/v2/*', [require('./middlewares/validate2')]);
 
 
 
 
 app.listen(process.env.PORT, () => {
-    console.log(`Server running in ${process.env.PORT}`);
+    console.log(`Server runnnnnnning in ${process.env.PORT}`);
 
 })
