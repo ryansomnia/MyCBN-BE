@@ -1,13 +1,10 @@
 'use strict';
-const response = require('../res/res');
+
 const connection = require('../config/connection');
 const nodemailer = require('nodemailer');
-const otpGenerator = require('otp-generator')
 let dotenv = require('dotenv');
 let env = dotenv.config();
 const moment = require('moment');
-
-var rn = require('random-number');
 
 let checknumber = (data) => {
   let reg = new RegExp("^[0-9]+$");
@@ -201,7 +198,7 @@ let user = {
             let hasil = await connection.execSP(qry)
 
             var OTP = Math.floor(1000 + Math.random() * 9000);
-            let qryOTP = `INSERT INTO otp (idRegis, email, otp, status) VALUES ('${idReg}','${email}','${OTP}',0)`;
+            let qryOTP = `INSERT INTO otp (idRegis, email, otp, status) VALUES (${idReg},'${email}','${OTP}',0)`;
             let hasilx = await connection.execQry(qryOTP)
 console.log("que",hasilx);
               if (hasil.code === 200){
@@ -250,7 +247,7 @@ console.log("que",hasilx);
 
         try {
             let qry = 'SELECT * FROM user';
-            let hasil = await connection.execSP(qry)
+            let hasil = await connection.execQry(qry)
            
             //    console.log(hasil);
                let response = {
@@ -390,7 +387,7 @@ console.log(mailOptions);
     res.status(400).send(response)
     }
       },
-    ValidateAccount : async(req, res ) => {
+    validateAccount : async(req, res ) => {
       let idRegis = req.body.idRegis
       let otp = req.body.otp
       if (otp == 0 || otp == null) {
@@ -456,238 +453,74 @@ console.log(mailOptions);
                 return response
 
           }
-      } 
-    }
-
-
-
-
-// send email
-// kenapa cron??
-
-//  let sendEmailverivikasiAkun = (req, res) => {
-//      let email = req.body.email
-//     let query = `SELECT email FROM user WHERE verify = '2' LIMIT 1 `;
-//     1 = sukses
-//     2 = pending
-// //    connection.query(query, (error, rows, result) => {
-//         // if (error) {
-//         //     console.log(error);
-//         // } else {
-//             if (email.length > 0) {
-
-//                 // let email =  rows[0].email;
-//                 let link = { 
-//                     dev :`${process.env.link_dev}/${email}`,
-//                     local : `${process.env.link_local}/${email}`
-//             }
-
-//                 let transporter = nodemailer.createTransport({
-//                     service: 'gmail',
-//                     auth: {
-//                         user: process.env.core_email,
-//                         pass: process.env.core_pw_email
-//                     }
-//                 });
-                
-//                 var mailOptions = {
-//                     from: process.env.core_email,
-//                     to: `${email}`,
-//                     subject: 'Verivikasi email',
-//                     text: `silahkan klik link ini untuk validasi akun anda ${link.local}`
-                   
-//                 };
-
-//                 transporter.sendMail(mailOptions, (err, info) => {
-//                     if (err) throw err;
-//                     console.log('Email terkirim: ' + info.response);
-//                 });
-                // response.ok('Data berhasil diubah', res)
-               
-                
-                // let update = `UPDATE user 
-                // SET verify = '1',
-                //  WHERE idUser = '${}'`
-  //           }
-  //       //   console.log(result);
-  //       }
-  //   })
-  // }
+      },
+    login : async(req, res ) => {
+        let username = req.body.username
+        let password = req.body.password
+        if (username == 0 || username == null) {
   
-//   let updateVerivikasiAkun = (req, res) => {
-//     let email = req.params.email
-// console.log(email);
-//     let qry = `UPDATE user 
-//     SET verify = '1'
-//      WHERE email = '${email}'`
-// console.log(qry);
-//     connection.query(qry, (error, result) => {
-//         if (error) {
-//             console.log(error);
-//         } else {
-//             response.ok('Data berhasil diubah', res)
-//             console.log(result.affectedRows, 'Data berhasil diubah');
-
-//         }
-//     })
-
-// }
-
-// let sendOTP = (req, res) => {
-    // let email = req.body.email
-   // let query = `SELECT email FROM user WHERE verify = '2' LIMIT 1 `;
-   // 1 = sukses
-   // 2 = pending
-//    connection.query(query, (error, rows, result) => {
-       // if (error) {
-       //     console.log(error);
-       // } else {
-        //    if (email.length > 0) {
-
-               // let email =  rows[0].email;
-        //        let link = { 
-        //            dev :`https://bemycbn.herokuapp.com/updateVerivikasiAkun/${email}`,
-        //            local : `http://localhost:5000/updateVerivikasiAkun/${email}`
-        //    }
-//                 let OTP = otpGenerator.generate(4, { upperCase: true, specialChars: false });
-//  console.log(OTP);
-//                let transporter = nodemailer.createTransport({
-//                    service: 'gmail',
-//                    auth: {
-//                        user: 'mycbngppk@gmail.com',
-//                        pass: 'mycbn5000'
-//                    }
-//                });
-               
-            //    var mailOptions = {
-            //        from: 'mycbngppk@gmail.com',
-            //        to: `${email}`,
-            //        subject: 'Verivikasi OTP',
-            //        text: `Kode OTP adalah : ${OTP}`
-                  
-            //    };
-
-            //    transporter.sendMail(mailOptions, (err, info) => {
+          let response = {
+              code: 400,
+              message: 'Error',
+              error:'username tidak terisi'
+            };
+          
     
-            //        if (err) {
-            //            console.log(err);
-            //        } else {
-            //            res.send(info)
-            //         console.log('Email terkirim: ' + info.response);
-            //        }
-                   
-            //    });
-               // response.ok('Data berhasil diubah', res)
-              
-               
-               // let update = `UPDATE user 
-               // SET verify = '1',
-               //  WHERE idUser = '${}'`
-        //    }
-       //   console.log(result);
-    //    }
-   // })
-//   } 
-
-// let getAllData = (req, res) => {
-
-//    let qry = 'SELECT * FROM user';
-//    connection.query(qry, (error, result, rows) => {
-//     if (error) {
-//         console.log(error);
-//     } else {
-//         response.ok(result, res)
-//       console.log(result);
-//     }
-// })
-
-// }
-
-
-
-// let selectOneUser = (req, res) => {
-//     let idUser = req.body.idUser
-
-// let show = `SELECT * FROM user WHERE idUser = '${idUser}'`;
-// connection.query(show, (error, result, rows) => {
-//     if (error) {
-//         console.log(error);
-//     } else {
-//         response.ok(result, res)
-//       console.log(result);
-//     }
-// })
-// }
-// let editOneUser = (req, res) => {
-//         let { 
-//             idUser,
-//             nama, 
-//             password, 
-//         email,
-//         tglLahir,
-//         alamat,
-//         NoHP,
-//         jenisKelamin,
-//         image} = req.body 
-
-//                 let qry = `UPDATE user 
-//                 SET nama = '${nama}',
-//                 password = '${password}',
-//                 email = '${email}',
-//                 tglLahir = '${tglLahir}',
-//                 alamat = '${alamat}',
-//                 NoHP = '${NoHP}',
-//                 jenisKelamin = '${jenisKelamin}'
-//                 image = '${image}'
-//                 WHERE idUser = '${idUser}'`
-
-//     connection.query(qry, (error, result) => {
-//         if (error) {
-//             console.log(error);
-//         } else {
-//             response.ok('Data berhasil diubah', res)
-//             console.log(result.affectedRows, 'Data berhasil diubah');
-
-//         }
-//     })
-
-// }
- 
-
-// let verivikasiAkun = function (req, res) {
-//     let email = req.body.email
+          res.status(400).send(response);
+          return response;
+        } 
+        if (password == 0 || password == null) {
+  
+          let response = {
+              code: 400,
+              message: 'Error',
+              error:'password tidak terisi'
+            };
+          
     
-
-//     let query = `SELECT * FROM user WHERE email = '${email}'`;
-
-// if valid = pending 
-// maka kirim email verivikasi 
-
-
-//     connection.query(query, function (error, rows) {
-//         if (error) {
-//             console.log(error);
-//          } else {
-//             if (rows.length == 0) {
-//                 let qry = `INSERT INTO user (nama, userName, password, role, email, tglRegis, tglLahir, alamat, kka, NoHP, jenisKelamin ) 
-//     VALUES('${data.nama}', '${data.username}', '${data.password}', 'user', '${data.email}', '${data.tglRegis}', 
-//             '${data.tglLahir}','${data.alamat}', '${data.kka}', '${data.NoHP}', '${data.jenisKelamin}')`
-
-//                 connection.query(qry, function (error, rows) {
-//                     if (error) {
-//                         console.log(error);
-                     
-//                     } else {
-//                         response.ok("Berhasil menambahkan user", res)
-//                         console.log("Berhasil menambahkan user");
-//                     }
-
-//                 })
-//             } else {
-//                  response.ok("Email sudah terdaftar", res);
-//             }
-//         }
-//     })
-// }
+          res.status(400).send(response);
+          return response;
+        } 
+  
+        try {
+          let qry = `CALL login ('${username}', '${password}')`
+          
+          let hasil = await connection.execSP(qry)
+  
+          console.log(hasil);
+  
+          if (hasil.code === 200){
+            let response = {
+                code: 200,
+                message: hasil.message,
+                data: hasil.data
+            };
+                console.log(response)
+                res.status(200).send(response)
+                return response
+  
+          } else {
+                let response = {
+                  code: hasil.code,
+                  message: hasil.message,
+                  error: hasil.description
+              };
+                  console.log(response) 
+                  res.status(hasil.code).send(response)
+                  return response
+      }
+        } catch (err) {
+              let response = {
+                code: 500,
+                message: error,
+                error:err
+              };
+                  console.log(response);
+                  res.status(500).send(response)
+                  return response
+  
+            }
+        } 
+    }
 
 module.exports = user;

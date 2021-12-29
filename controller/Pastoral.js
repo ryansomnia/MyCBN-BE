@@ -1,134 +1,235 @@
 'use strict';
-let response = require('../res/res');
-let connection = require('../config/connection');
-// const Joi = require('joi')
+const response = require('../res/res');
+const connection = require('../config/connection');
+let dotenv = require('dotenv');
+let env = dotenv.config();
 const moment = require('moment');
- 
 
-let getAllData = (req, res) => {
+var rn = require('random-number');
 
-   let qry = 'SELECT * FROM user where role = "pastoral"';
-   connection.query(qry, (error, result, rows) => {
-    if (error) {
-        console.log(error);
-    } else {
-        response.ok(result, res)
-      console.log(result);
+let checknumber = (data) => {
+  let reg = new RegExp("^[0-9]+$");
+  if (!reg.test(data)) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+let pastoral = {
+    permohonanDoa : async(req, res) => {
+
+        let username = req.body.username
+       
+        if (username == 0 || username == null) {
+
+            let response = {
+                code: 400,
+                message: 'Error',
+                error:'username tidak terisi'
+              };
+            
+      
+            res.status(400).send(response);
+            return response;
+          } 
+
+
+        let password = req.body.password
+        let reTypePass = req.body.reTypePass
+
+        if (password == 0 || password == null) {
+
+            let response = {
+                code: 400,
+                message: 'Error',
+                error:'password tidak terisi'
+              };
+            
+      
+            res.status(400).send(response);
+            return response;
+          } 
+
+          
+          if (reTypePass == 0 || reTypePass == null) {
+
+            let response = {
+                code: 400,
+                message: 'Error',
+                error:'confirmasi Password tidak terisi'
+              };
+            
+      
+            res.status(400).send(response);
+            return response;
+          } 
+
+          if (password != reTypePass) {
+            let response =
+            {
+              code: 400,
+              message: 'Error',
+              error:'Password Konfirmasi harus sama'
+            }
+            res.status(400).send(response);
+            return response;
+          }
+
+
+
+        let fullName = req.body.fullName
+
+        if (fullName == 0 || fullName == null) {
+
+            let response = {
+                code: 400,
+                message: 'Error',
+                error:'Nama Lengkap tidak terisi'
+              };
+            
+      
+            res.status(400).send(response);
+            return response;
+          } 
+
+        let sex = req.body.sex
+
+        if (sex == 0 || sex == null) {
+
+            let response = {
+                code: 400,
+                message: 'Error',
+                error:'Jenis Kelamin tidak terisi'
+              };
+            
+      
+            res.status(400).send(response);
+            return response;
+          } 
+
+
+        let address = req.body.address
+
+        if (address == 0 || address == null) {
+
+            let response = {
+                code: 400,
+                message: 'Error',
+                error:'Alamat tidak terisi'
+              };
+            
+      
+            res.status(400).send(response);
+            return response;
+          } 
+
+        let email = req.body.email
+
+        if (email == 0 || email == null) {
+
+            let response = {
+                code: 400,
+                message: 'Error',
+                error:'email tidak terisi'
+              };
+            
+      
+            res.status(400).send(response);
+            return response;
+          } 
+
+          let emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+          if (!emailRegexp.test(email)) {
+         
+            let response = {
+              code: 400,
+              message: 'Error',
+              error:'format email salah'
+            };
+            res.status(400).send(response);
+            return response;
+          }
+
+
+        let handphone = req.body.handphone
+
+        if (handphone == 0 || handphone == null) {
+
+            let response = {
+                code: 400,
+                message: 'Error',
+                error:'Nomor handphone tidak terisi'
+              };
+            
+      
+            res.status(400).send(response);
+            return response;
+          } 
+
+          if (checknumber(handphone)) {
+            let response =
+            {
+              code: 400,
+              message: 'Error',
+              error:'Nomor Handphone harus numerik'
+            }
+            res.status(400).send(response);
+            return response;
+          } 
+
+         
+        try {
+      
+          
+            let qryOTP = `INSERT INTO otp (idRegis, email, otp, status) VALUES (${idReg},'${email}','${OTP}',0)`;
+            let hasilx = await connection.execQry(qryOTP)
+
+              if (hasil.code === 200){
+                    let response = {
+                        code: 200,
+                        message: 'success',
+                        data: {
+                            username : username,
+                            email: email,
+                            handphone : handphone
+                        }
+                    };
+                    
+
+            console.log(response)
+            res.status(200).send(response)
+            await user.otpMailConfirmation(email,OTP)
+              } else {
+                        let error = {
+                          code: hasil.code,
+                          message: hasil.message,
+                          error: hasil.error
+                      };
+          console.log(error) 
+          res.status(400).send(error)
+       return error
+              }
+
+        } catch (error) {
+               
+
+                        let response = {
+                        code: hasil.code,
+                        message: hasil.message,
+                        error:error
+                      };
+              console.log(response);
+              res.status(400).send(response)
+              return response
+        }
+    },
+    // router.post('/cbn/v1/pastoral/permohonanDoa', pastoral.registrasi);
+    // router.post('/cbn/v1/pastoral/pelayananKematian', pastoral.getbyUser);
+    // router.post('/cbn/v1/pastoral/pelayananPernikahan', pastoral.getbyUser);
+    // router.post('/cbn/v1/pastoral/pelayananBaptisan', pastoral.getbyUser);
+    // router.post('/cbn/v1/pastoral/pelayananPenyerahanAnak', pastoral.getbyUser);
+    // router.post('/cbn/v1/pastoral/pelayananKonseling', pastoral.getbyUser);
     }
-})
 
-}
-
-
- let getbyUser = (req, res) => {
-
-    let nama = req.body.nama
-
-    let qry = `SELECT * FROM listdoa WHERE role = "pastoral" AND nama = "${nama}"`;
-    connection.query(qry, (error, result, rows) => {
-     if (error) {
-         console.log(error);
-     } else {
-         response.ok(result, res)
-       console.log(result);
-     }
- })
- 
- }
-
-
-// let addOneData = (req, res) => {
-
-//  let{
-//     nama,
-//     noHP ,
-//     isiDoa
-//     } = req.body
-
-
-//    if (nama.length == 0) {
-//             let ress = {
-//                 status: 'error',
-//                 error: 'data nama kosong',
-//             }
-
-//             res.send(ress);
-//             return;
-//         }
-
-
-//     if (noHP.length == 0) {
-//             let ress = {
-//                 status: 'error',
-//                 error: 'data nomor HP kosong',
-//             }
-
-//             res.send(ress);
-//             return;
-//         }
-        
-//     if (response.checknumber(noHP)) {
-//             let ress = {
-//                 status: 'error',
-//                 error: 'No HP Invalid, No HP bercampur alphanumeric / angka dan huruf',
-//             }
-//             res.send(ress);
-//             return;
-//         }
-//     if (isiDoa.length == 0) {
-//             let ress = {
-//                 status: 'error',
-//                 error: 'isi doa kosong',
-//             }
-
-//             res.send(ress);
-//             return;
-//         }
-
-// let waktuRequest = moment().format("YYYY-MM-DD")
-
-
-//          try {
-//             let qry = `INSERT INTO listdoa (nama, noHP, waktuRequest, isiDoa) 
-//             VALUES('${nama}', '${noHP}', '${waktuRequest}', '${isiDoa}')`
-        
-//             connection.query(qry, (error, rows, result) => {
-//                 if (error) {
-//                     console.log(error);
-//                 } else {
-//                     response.ok(result, res)
-//                     console.log(`Data ${nama} berhasil ditambahkan`);
-                 
-//                 }
-//             })
-//          } catch (error) {
-//              console.log(error);
-//          } 
-    
-// }
-
-
-// let deleteOneData = (req, res) => {
-//     let ID = req.body.ID
-
-//     let qry = `DELETE FROM listdoa WHERE  = '${ID}'`
-
-//     connection.query(qry, (error, result) => {
-//         if (error) {
-//             console.log(error);
-//         } else {
-//             response.ok('Data berhasil terhapus', res)
-//             console.log(result.affectedRows, 'Data berhasil terhapus');
-
-//         }
-//     })
-
-// }
-
-module.exports = {
-    getAllData,
-    getbyUser,
-    // addOneData,
-    // deleteOneData
-
-}
+module.exports = pastoral;

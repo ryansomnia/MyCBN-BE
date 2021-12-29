@@ -2,7 +2,7 @@ const express = require('express');
 // const auth = require('../middleware/auth');
 const router = express.Router();
 // const verifikasi = require('../middleware/verifikasi')
-const validation = require('../middleware/validationdev')
+const validation = require('../middleware/validation')
 const user = require('../controller/User')
 const pastoral = require('../controller/Pastoral')
 const artikel = require('../controller/Artikel')
@@ -12,30 +12,30 @@ const cron = require("node-cron");
 const { haltOnTimedout, errorFilter } = require('../helpers/connectTimeOut');
 
 var timeout=require('connect-timeout');
-// //menu regis n login
-// router.post('/cbn/v1/register',timeout(5000), auth.registrasi, haltOnTimedout, errorFilter);
-// router.post('/cbn/v1/login',timeout(5000),auth.login, haltOnTimedout, errorFilter);
 
 
-// //alamat otorisasi
-// router.get('/cbn/v1/rahasia', verifikasi.verifikasi(), auth.halamanrahasia);
-// router.get('/cbn/v1/admin', verifikasi.verifikasiAdmin(), auth.halamanAdmin);
-// // formula rest (url, verivied sebagai?, crud)
 
 // // cbn USER
-router.get('/cbn/v1/getuser', user.getAllData);
-router.post('/cbn/v1/registrasi', user.registrasi);
-router.post('/cbn/v1/deleteAccount', user.deleteAccount);
-router.post('/cbn/v1/otpMailConfirmation', user.otpMailConfirmation);
-router.post('/cbn/v1/ValidateAccount', user.ValidateAccount);
+router.get('/cbn/v1/user/getuser', user.getAllData);
+router.post('/cbn/v1/user/registrasi', user.registrasi);
+router.post('/cbn/v1/user/deleteAccount', user.deleteAccount);
+router.post('/cbn/v1/user/otpMailConfirmation', user.otpMailConfirmation);
+router.post('/cbn/v1/user/validateAccount', user.validateAccount);
+router.post('/cbn/v1/user/login', user.login);
+
+
 
 // router.post('/adduser', user.addOneData);
 // router.delete('/deleteuser', user.deleteOneData);
 // router.post('/edituser', user.selectOneUser);
 // router.post('/edituser', user.editOneUser);
-// //cbn Pastoral
-// router.get('/pastoral', pastoral.getAllData);
-// router.post('/OnePastoral', pastoral.getbyUser);
+//cbn Pastoral
+router.post('/cbn/v1/pastoral/permohonanDoa', pastoral.permohonanDoa);
+router.post('/cbn/v1/pastoral/pelayananKematian', pastoral.getbyUser);
+router.post('/cbn/v1/pastoral/pelayananPernikahan', pastoral.getbyUser);
+router.post('/cbn/v1/pastoral/pelayananBaptisan', pastoral.getbyUser);
+router.post('/cbn/v1/pastoral/pelayananPenyerahanAnak', pastoral.getbyUser);
+router.post('/cbn/v1/pastoral/pelayananKonseling', pastoral.getbyUser);
 
 // //cbn ARTIKEL
 // router.get('/getAllArticle', artikel.getAllData );
