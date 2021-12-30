@@ -16,7 +16,7 @@ module.exports = async function (req,res,next) {
 
     try {
         let api =[
-            "/cbn/v1/registrasi","/cbn/v1/ValidateAccount"
+            "/cbn/v1/user/registrasi","/cbn/v1/user/ValidateAccount","/cbn/v1/user/login","/cbn/v1/user/getuser"
         ];
 
         if((api.includes(req.url)) == false){
