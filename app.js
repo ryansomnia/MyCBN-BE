@@ -73,3 +73,10 @@ app.listen(process.env.PORT, () => {
     console.log(`Server running in ${process.env.PORT}`);
 
 })
+// req.on('error', function(err) {
+//   if (err.code === "ECONNRESET") {
+//       console.log("Timeout occurs");
+//       return;
+//   }
+//   //handle normal errors
+// });
