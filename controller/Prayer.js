@@ -1,5 +1,5 @@
 'use strict';
-let response = require('../res/res');
+// let response = require('../res/res');
 let connection = require('../config/connection');
 const Joi = require('joi')
 const moment = require('moment');

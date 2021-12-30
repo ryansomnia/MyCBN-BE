@@ -2,16 +2,16 @@ const express = require('express');
 // const auth = require('../middleware/auth');
 const router = express.Router();
 // const verifikasi = require('../middleware/verifikasi')
-const validation = require('../middleware/validation')
+// const validation = require('../middleware/validation')
 const user = require('../controller/User')
 const pastoral = require('../controller/Pastoral')
-const artikel = require('../controller/Artikel')
-const doa = require('../controller/Prayer')
-const kka = require('../controller/KKA')
-const cron = require("node-cron");
-const { haltOnTimedout, errorFilter } = require('../helpers/connectTimeOut');
+// const artikel = require('../controller/Artikel')
+// const doa = require('../controller/Prayer')
+// const kka = require('../controller/KKA')
+// const cron = require("node-cron");
+// const { haltOnTimedout, errorFilter } = require('../helpers/connectTimeOut');
 
-var timeout=require('connect-timeout');
+// var timeout=require('connect-timeout');
 
 
 
@@ -30,12 +30,12 @@ router.post('/cbn/v1/user/login', user.login);
 // router.post('/edituser', user.selectOneUser);
 // router.post('/edituser', user.editOneUser);
 //cbn Pastoral
-router.post('/cbn/v1/pastoral/permohonanDoa', pastoral.permohonanDoa);
-router.post('/cbn/v1/pastoral/pelayananKematian', pastoral.getbyUser);
-router.post('/cbn/v1/pastoral/pelayananPernikahan', pastoral.getbyUser);
-router.post('/cbn/v1/pastoral/pelayananBaptisan', pastoral.getbyUser);
-router.post('/cbn/v1/pastoral/pelayananPenyerahanAnak', pastoral.getbyUser);
-router.post('/cbn/v1/pastoral/pelayananKonseling', pastoral.getbyUser);
+// router.post('/cbn/v1/pastoral/permohonanDoa', pastoral.permohonanDoa);
+// router.post('/cbn/v1/pastoral/pelayananKematian', pastoral.getbyUser);
+// router.post('/cbn/v1/pastoral/pelayananPernikahan', pastoral.getbyUser);
+// router.post('/cbn/v1/pastoral/pelayananBaptisan', pastoral.getbyUser);
+// router.post('/cbn/v1/pastoral/pelayananPenyerahanAnak', pastoral.getbyUser);
+// router.post('/cbn/v1/pastoral/pelayananKonseling', pastoral.getbyUser);
 
 // //cbn ARTIKEL
 // router.get('/getAllArticle', artikel.getAllData );

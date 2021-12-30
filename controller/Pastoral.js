@@ -1,5 +1,5 @@
 'use strict';
-const response = require('../res/res');
+
 const connection = require('../config/connection');
 let dotenv = require('dotenv');
 let env = dotenv.config();
