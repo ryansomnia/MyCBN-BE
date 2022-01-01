@@ -8,11 +8,12 @@ exports.execSP = async (query) => {
    
     try{
         const connect =  await mysql2.createConnection({
-            host: process.env.local_HOST,
-            // port: process.env.DB_DOCKER_PORT,
-            user: process.env.local_USERNAME,
-            password: process.env.local_PASSWORD,
-            database: process.env.local_DATABASE
+            host: process.env.vpn_HOST,
+            // port: process.env.vpn_PORT,
+            user: process.env.vpn_USERNAME,
+            password: process.env.vpn_PASSWORD,
+            database: process.env.vpn_DATABASE,
+
         })
         
         return new Promise ((resolve, reject) =>{
@@ -65,11 +66,11 @@ exports.execQry = async (query) => {
    
     try{
         const connect =  await mysql2.createConnection({
-            host: process.env.local_HOST,
-            // port: process.env.DB_DOCKER_PORT,
-            user: process.env.local_USERNAME,
-            password: process.env.local_PASSWORD,
-            database: process.env.local_DATABASE
+            host: process.env.vpn_HOST,
+            // port: process.env.vpn_PORT,
+            user: process.env.vpn_USERNAME,
+            password: process.env.vpn_PASSWORD,
+            database: process.env.vpn_DATABASE
         })
         
         return new Promise ((resolve, reject) =>{
@@ -88,6 +89,7 @@ exports.execQry = async (query) => {
                     connect.query(query, function (error, result, rows, fields) {
                         connect.end();
                         if (error) {
+                            console.log(error);
                             throw error;
                         } else {
                             // console.log("rrr",result[0][0].code);

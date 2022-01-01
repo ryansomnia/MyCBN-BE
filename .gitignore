@@ -6,8 +6,8 @@ tmp
 logfile
 *.log
 
-Environment variables, never commit this file
-.env
+# Environment variables, never commit this file
+*.env
 *.log
 *.png
 *.jpg
