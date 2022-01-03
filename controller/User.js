@@ -197,10 +197,10 @@ let user = {
             let qry = `CALL register('${idReg}','${username}', '${password}', '${fullName}', '${sex}', '${address}', '${email}', '${handphone}')`;
             let hasil = await connection.execSP(qry)
 
-            var OTP = Math.floor(1000 + Math.random() * 9000);
-            let qryOTP = `INSERT INTO otp (idRegis, email, otp, status) VALUES (${idReg},'${email}','${OTP}',0)`;
-            let hasilx = await connection.execQry(qryOTP)
-console.log("que",hasilx);
+            // var OTP = Math.floor(1000 + Math.random() * 9000);
+            // let qryOTP = `INSERT INTO otp (idRegis, email, otp, status) VALUES (${idReg},'${email}','${OTP}',0)`;
+            // let hasilx = await connection.execQry(qryOTP)
+// console.log("que",hasilx);
               if (hasil.code === 200){
                     let response = {
                         code: 200,
@@ -215,7 +215,7 @@ console.log("que",hasilx);
 
             console.log(response)
             res.status(200).send(response)
-            await user.otpMailConfirmation(email,OTP)
+            // await user.otpMailConfirmation(email,OTP)
               } else {
                         let error = {
                           code: hasil.code,

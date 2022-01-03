@@ -7,7 +7,7 @@ const user = require('../controller/User')
 const pastoral = require('../controller/Pastoral')
 // const artikel = require('../controller/Artikel')
 // const doa = require('../controller/Prayer')
-// const kka = require('../controller/KKA')
+const kka = require('../controller/KKA')
 // const cron = require("node-cron");
 // const { haltOnTimedout, errorFilter } = require('../helpers/connectTimeOut');
 
@@ -29,6 +29,7 @@ router.post('/cbn/v1/user/login', user.login);
 // router.delete('/deleteuser', user.deleteOneData);
 // router.post('/edituser', user.selectOneUser);
 // router.post('/edituser', user.editOneUser);
+
 //cbn Pastoral
 // router.post('/cbn/v1/pastoral/permohonanDoa', pastoral.permohonanDoa);
 // router.post('/cbn/v1/pastoral/pelayananKematian', pastoral.getbyUser);
@@ -59,11 +60,9 @@ router.post('/cbn/v1/user/login', user.login);
 
 
 // //cbn KKA
-// router.get('/getAllKKA', kka.getAllData );
-// router.get('/getAllKKA', kka.getbyName );
-// router.get('/getAllKKA', kka.getbyArea );
-// router.post('/addOneKKA', kka.addOneData );
-// router.delete('/deleteOneKKA', kka.deleteOneData);
+router.get('/cbn/v1/KKA/getListKKA', kka.getListKKA );
+router.post('/cbn/v1/KKA/registrasiKKA', kka.registrasiKKA );
+
 
 
 

@@ -1,240 +1,213 @@
-'use strict';
-// let response = require('../res/res');
-let connection = require('../config/connection');
-const Joi = require('joi')
+const connection = require('../config/connection');
+let dotenv = require('dotenv');
+let env = dotenv.config();
 const moment = require('moment');
- 
 
-let getAllData = (req, res) => {
+let checknumber = (data) => {
+  let reg = new RegExp("^[0-9]+$");
+  if (!reg.test(data)) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
-   let qry = 'SELECT * FROM listkka';
-   connection.query(qry, (error, result, rows) => {
-    if (error) {
-        console.log(error);
-    } else {
-        response.ok(result, res)
-      console.log(result);
-    }
-})
-
-}
-
-
- let getbyName = (req, res) => {
-
-    let nama = req.body.nama
-
-    let qry = `SELECT * FROM listkka WHERE nama = "${nama}"`;
-    connection.query(qry, (error, result, rows) => {
-     if (error) {
-         console.log(error);
-     } else {
-         response.ok(result, res)
-       console.log(result);
-     }
- })
- 
- }
-
-
- let getbyArea = (req, res) => {
-
-    let area = req.body.area
-
-        let qry = `SELECT * FROM listkka WHERE area = "${area}"`;
-        connection.query(qry, (error, result, rows) => {
-        if (error) {
+let KKA = {
+    getListKKA : async(req, res) =>{
+        try {
+            let qry = 'SELECT * FROM kka';
+            let hasil = await connection.execQry(qry)
+               let response = {
+                code: 200,
+                message: 'success',
+                data: hasil
+              };
+             console.log(response)
+              res.status(200).send(response)
+        return hasil
+        } catch (error) {
             console.log(error);
-        } else {
-            response.ok(result, res)
-        console.log(result);
+            let response = {
+                code: hasil.code,
+                message: hasil.message,
+                error:error
+              };
+              res.status(400).send(response)
         }
-    })
- 
- }
+    },
+    // createDataKKA : async(req, res)=>{
 
+    // },
+    registrasiKKA : async(req, res) => {
 
-let addOneData = (req, res) => {
-
- let{
-    nama,
-    area,
-    ketua,
-    noHPKetua,
-    Pembimbing,
-    noHPPembimbing,
-    hari,
-    jam,
-    } = req.body
-
-
-   if (nama.length == 0) {
-            let ress = {
-                status: '200',
-                message: 'error',
-                values:'field nama kosong'
-            }
-
-            res.send(ress);
-            return;
-        }
-
-
-    if (area.length == 0) {
-            let ress = {
-                status: '200',
-                message: 'error',
-                values:'field area kosong'
-            }
-
-            res.send(ress);
-            return;
-        }
-
-    if (ketua.length == 0) {
-            let ress = {
-                status: '200',
-                message: 'error',
-                values:'field ketua kosong'
-            }
-
-            res.send(ress);
-            return;
-        }
-
-
-        if (noHPKetua.length == 0){
-
-            let ress = {
-
-                status: '200',
-                message: 'error',
-                values: 'field noHPKetua kosong'
-            }
-
-            res.send(ress);
-            return;
-            
-        } else if (response.checknumber(noHPKetua)) {
-            let ress = {
-
-                status: '200',
-                message: 'error',
-                values: 'No HP Ketua Invalid, No HP bercampur alphanumeric / angka dan huruf'
-            }
-            res.send(ress);
-            return;
-        }
-
-        if (Pembimbing.length == 0) {
-            let ress = {
-                status: '200',
-                message: 'error',
-                values: 'field Pembimbing kosong'
-            }
-
-            res.send(ress);
-            return;
-        }
-
-
-        if (noHPPembimbing.length == 0){
-
-            let ress = {
-                status: '200',
-                message: 'error',
-                values: 'field noHP Pembimbing kosong'
-            }
-
-            res.send(ress);
-            return;
-            
-        } else if (response.checknumber(noHPPembimbing)) {
-            let ress = {
-
-                status: '200',
-                message: 'error',
-                values: 'No HP Pembimbing Invalid, No HP bercampur alphanumeric / angka dan huruf'
-            
-            }
-            res.send(ress);
-            return;
-        }
-
-
+        let username = req.body.username
         
-        if (hari.length == 0){
+        if (username == 0 || username == null) {
 
-            let ress = {
-                status: '200',
-                message: 'error',
-                values: 'field hari kosong'
-            }
-
-            res.send(ress);
-            return;
-            
-        } 
-
-        if (jam.length == 0){
-
-            let ress = {
-
-                status: '200',
-                message: 'error',
-                values: 'field jam kosong'
-            }
-
-            res.send(ress);
-            return;
-            
-        } 
-
-        
-
-
-         try {
-            let qry = `INSERT INTO listkka ( nama, area, ketua, noHPKetua, Pembimbing, noHPPembimbing, hari, jam,) 
-            VALUES('${nama}', '${area}', '${ketua}', '${noHPKetua}', '${Pembimbing}', '${noHPPembimbing}', '${hari}', '${jam}')`
-        
-            connection.query(qry, (error, rows, result) => {
-                if (error) {
-                    console.log(error);
-                } else {
-                    response.ok(result, res)
-                    console.log(`Data ${nama} berhasil ditambahkan`);
-                 
-                }
-            })
-         } catch (error) {
-             console.log(error);
-         } 
+          let response = {
+              code: 400,
+              message: 'Error',
+              error:'username tidak terisi'
+            };
+          
     
-}
+          res.status(400).send(response);
+          return response;
+        } 
 
 
-let deleteOneData = (req, res) => {
-    let nama = req.body.nama
+        let namaLengkap = req.body.namaLengkap
+        
+        if (namaLengkap == 0 || namaLengkap == null) {
 
-    let qry = `DELETE FROM listkka WHERE  nama = '${nama}'`
+          let response = {
+              code: 400,
+              message: 'Error',
+              error:'Nama Lengkap tidak terisi'
+            };
+          
+    
+          res.status(400).send(response);
+          return response;
+        } 
 
-    connection.query(qry, (error, result) => {
-        if (error) {
-            console.log(error);
-        } else {
-            response.ok('Data berhasil terhapus', res)
-            console.log(result.affectedRows, 'Data berhasil terhapus');
+        let noHP = req.body.noHP
+        if (noHP == 0 || noHP == null) {
 
+            let response = {
+                code: 400,
+                message: 'Error',
+                error:'Nomor handphone tidak terisi'
+              };
+            
+      
+            res.status(400).send(response);
+            return response;
+          } 
+
+          if (checknumber(noHP)) {
+            let response =
+            {
+              code: 400,
+              message: 'Error',
+              error:'Nomor Handphone harus numerik'
+            }
+            res.status(400).send(response);
+            return response;
+          } 
+
+        let usia = req.body.usia
+        if (usia == 0 || usia == null) {
+
+          let response = {
+              code: 400,
+              message: 'Error',
+              error:'usia tidak terisi'
+            };
+          
+    
+          res.status(400).send(response);
+          return response;
+        } 
+        if (checknumber(usia)) {
+          let response =
+          {
+            code: 400,
+            message: 'Error',
+            error:'Usia harus numerik'
+          }
+          res.status(400).send(response);
+          return response;
+        } 
+
+        let statusPernikahan = req.body.statusPernikahan
+        if (statusPernikahan == 0 || statusPernikahan == null) {
+
+          let response = {
+              code: 400,
+              message: 'Error',
+              error:'status Pernikahan tidak terisi'
+            };
+          
+    
+          res.status(400).send(response);
+          return response;
+        } 
+
+
+        let wilayah = req.body.wilayah
+
+        if (wilayah == 0 || wilayah == null) {
+
+            let response = {
+                code: 400,
+                message: 'Error',
+                error:'Wilayah tidak terisi'
+              };
+            
+      
+            res.status(400).send(response);
+            return response;
+          } 
+
+        let codeKKA = req.body.codeKKA
+        if (codeKKA == 0 || codeKKA == null) {
+
+          let response = {
+              code: 400,
+              message: 'Error',
+              error:'pilihan KKA tidak terisi'
+            };
+          
+    
+          res.status(400).send(response);
+          return response;
+        } 
+
+    
+       
+        try {
+            let qry = `CALL registerMemberKKA('${username}','${namaLengkap}', '${noHP}', '${usia}', '${statusPernikahan}', '${wilayah}', '${codeKKA}')`;
+            let hasil = await connection.execSP(qry)
+
+              if (hasil.code === 200){
+                    let response = {
+                        code: 200,
+                        message: 'success',
+                        description: ` Selamat ${namaLengkap} telah mau bergabung dengan KKA, mohon menunggu beberapa waktu kedepan untuk di follow up keta KKA mu`
+                    };
+                    
+
+            console.log(response)
+            res.status(200).send(response)
+
+              } else {
+                        let error = {
+                          code: hasil.code,
+                          message: hasil.message,
+                          error: hasil.error
+                      };
+          console.log(error) 
+          res.status(400).send(error)
+       return error
+              }
+
+        } catch (error) {
+               
+
+                        let response = {
+                        code: hasil.code,
+                        message: hasil.message,
+                        error:error
+                      };
+              console.log(response);
+              res.status(400).send(response)
+              return response
         }
-    })
+    
+    
+    
+    }
+    }
 
-}
-
-module.exports = {
-    getAllData,
-    getbyName,
-    getbyArea,
-    addOneData,
-    deleteOneData
-
-}
+module.exports = KKA;
