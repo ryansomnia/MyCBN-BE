@@ -5,7 +5,7 @@ const router = express.Router();
 // const validation = require('../middleware/validation')
 const user = require('../controller/User')
 const pastoral = require('../controller/Pastoral')
-// const artikel = require('../controller/Artikel')
+const artikel = require('../controller/Artikel')
 // const doa = require('../controller/Prayer')
 const kka = require('../controller/KKA')
 // const cron = require("node-cron");
@@ -39,8 +39,8 @@ router.post('/cbn/v1/user/login', user.login);
 // router.post('/cbn/v1/pastoral/pelayananKonseling', pastoral.getbyUser);
 
 // //cbn ARTIKEL
-// router.get('/getAllArticle', artikel.getAllData );
-// router.post('/addOneArticle', artikel.addOneData );
+router.get('/getAllArticle', artikel.getAllData );
+router.post('/addOneArticle', artikel.addArtikel );
 // router.post('/editOneArticle', artikel.editOneData);
 // router.delete('/deleteOneArticle', artikel.deleteOneData );
 

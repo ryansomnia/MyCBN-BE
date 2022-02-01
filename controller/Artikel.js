@@ -1,185 +1,136 @@
  'use strict';
-// let response = require('../res/res');
 let connection = require('../config/connection');
+const nodemailer = require('nodemailer');
+let dotenv = require('dotenv');
+let env = dotenv.config();
+const moment = require('moment');
+const writeFile = promisify(fs.writeFile);
+const secretKey = process.env.SECRET_KEY;
+const folder = process.env.DIREKTORI_IMG;
+const cryptr = new Cryptr(secretKey);
 
-const upload = require('./../helpers/image-upload')
 
- 
-// var text = 'foo © bar 𝌆 baz';
-// var bytes = utf8.encode(text);
-// var encoded = base64.encode(bytes);
-// console.log(encoded);
+        function getTime() {
+            let asiaTimeStart = new Date().toLocaleString("en-US", {
+                  timeZone: "Asia/Jakarta",
+                });
+            console.log(asiaTimeStart);
+            let time = moment(asiaTimeStart, "MM/DD/YYYY hh:mm:ss").format(
+                  "YYYY-MM-DD hh:mm:ss"
+                );
+            console.log(time);
+                return time;
+              }           
+let artikel = {
 
-let getAllData = (req, res) => {
+    getAllData: async(req, res)=>{
+        try {
+           
+            let qry = 'SELECT * FROM user';
+            let hasil = await connection.execQry(qry)
+            let response = {
+                code: 200,
+                message: 'success',
+                data: hasil
+              };
+             console.log(response)
+              res.status(200).send(response)
+        return hasil
 
-   let qry = 'SELECT * FROM artikel';
-   connection.query(qry, (error, result, rows) => {
-    if (error) {
-        console.log(error);
-    } else {
-        response.ok(result, res)
-      console.log(result);
+        } catch (error) {
+            console.log(error);
+            let response = {
+                code: hasil.code,
+                message: hasil.message,
+                error:error
+              };
+              res.status(400).send(response)
+        }
+    },
+    addArtikel: async(req,res)=>{
+        try {
+
+        let judulArtikel = req.body.judulArtikel
+        if (judulArtikel == 0 || judulArtikel == null) {
+
+            let response = {
+                code: 400,
+                message: 'Error',
+                error:'Judul Artikel tidak terisi'
+              };      
+            res.status(400).send(response);
+            return response;
+          }
+          
+        let isiArtikel = req.body.isiArtikel
+        if (isiArtikel == 0 || isiArtikel == null) {
+
+            let response = {
+                code: 400,
+                message: 'Error',
+                error:'Isi Artikel tidak terisi'
+              };      
+            res.status(400).send(response);
+            return response;
+          }
+
+          let kategori = req.body.kategori
+          if (kategori == 0 || kategori == null) {
+  
+              let response = {
+                  code: 400,
+                  message: 'Error',
+                  error:'kategori tidak terisi'
+                };      
+              res.status(400).send(response);
+              return response;
+            }
+        let tag = req.body.tag
+        if (tag == 0 || tag == null) {
+    
+             let response = {
+                  code: 400,
+                  message: 'Error',
+                  error:'tag tidak terisi'
+                };      
+              res.status(400).send(response);
+              return response;
+            }
+            let waktuPembuatan = getTime();
+           
+                let image = req.body.image
+                let splitbs64 = image.split(",") 
+                let splity = image.split("/")
+                let splitformat = splity[1].split(";")
+                let content = splitbs64[1];
+                console.log(content)
+                let ext_file = splitformat[0]
+                console.log(ext_file)
+                let encryptedString = cryptr.encrypt(judulArtikel);
+                let direk = `${folder}${encryptedString}.${ext_file}`;
+                let direkString = direk.toString()
+
+                await writeFile(direk, content, "base64");
+                let qry = `INSERT INTO artikel VALUES(${judulArtikel}, ${isiArtikel}, ${kategori}, ${tag}, ${waktuPembuatan}, ${direkString})`;
+                let hasil = await connection.execQry(qry)
+                let response = {
+                    code: 200,
+                    message: 'success',
+                  };
+                 console.log(response)
+                  res.status(200).send(response)
+            return hasil
+    
+        } catch (error) {
+            console.log(error);
+            let response = {
+                code: hasil.code,
+                message: hasil.message,
+                error:error
+              };
+              res.status(400).send(response)
+        }
     }
-})
 
 }
-
-let getAllRenungan = (req, res) => {
-
-    let qry = 'SELECT * FROM artikel WHERE kodeSegment = "R1"';
-    connection.query(qry, (error, result, rows) => {
-     if (error) {
-         console.log(error);
-     } else {
-         response.ok(result, res)
-       console.log(result);
-     }
- })
- 
- }
-
- let getAllNews = (req, res) => {
-
-    let qry = 'SELECT * FROM artikel WHERE kodeSegment = "N1"';
-    connection.query(qry, (error, result, rows) => {
-     if (error) {
-         console.log(error);
-     } else {
-         response.ok(result, res)
-       console.log(result);
-     }
- })
- 
- }
- let getOneRenungan = (req, res) => {
-    let id = req.body.id;
-    
-    let qry = `SELECT * FROM artikel WHERE idartikel = '${id}' AND kodeSegment = 'R1' `;
-    connection.query(qry, (error, result, rows) => {
-        console.log(result);
-     if (error) {
-         console.log(error);
-
-        } else if (id == null){
-            response.empytvalue(result, res)
-            console.log(res);
-
-            } else if (result.length <= 1){
-                response.wrongvalue(result, res)
-                console.log(res);
-
-                }else { 
-                    response.ok(result, res)
-                    console.log(result);
-                }
- })
- 
- }
- let getOneNews = (req, res) => {
-    let id = req.body.id;
-    
-    let qry = `SELECT * FROM artikel WHERE idartikel = '${id}' AND kodeSegment = 'N1' `;
-    connection.query(qry, (error, result, rows) => {
-     if (error) {
-         console.log(error);
-     } else {
-         response.ok(result, res)
-       console.log(result);
-     }
- })
- 
- }
-
-let addOneData = (req, res) => {
-    
-    let {
-        kodeSegment,
-        judul,
-        isiArtikel,
-    } = req.body
-
-    let image = req.file.image
-// let dateCreated =  Date.now
-
-         try {
-            let qry = `INSERT INTO artikel (kodeSegment, judul, image, isiArtikel, dateCreated) 
-            VALUES('${kodeSegment}', '${judul}', '${image}', '${isiArtikel}', '(SELECT CURDATE())')`
-        
-            connection.query(qry, (error, rows, result) => {
-                if (error) {
-                    console.log(error);
-                } else {
-                    response.ok(result, res)
-                    // kita bereskan besok wkwkwk
-                    console.log(result,'Data berhasil ditambahkan');
-                 
-                }
-            })
-         } catch (error) {
-             console.log(error);
-         } 
-    
-}
-
-
-let deleteOneData = (req, res) => {
-    let id = req.body.id
-
-    let qry = `DELETE FROM artikel WHERE  = '${id}'`
-
-    connection.query(qry, (error, result) => {
-        if (error) {
-            console.log(error);
-        } else {
-            response.ok('Data berhasil terhapus', res)
-            console.log(result.affectedRows, 'Data berhasil terhapus');
-
-        }
-    })
-
-}
-
-let editOneData = (req, res) => {
-    let id = req.body.id
-
-    let {
-        kodeSegment,
-        judul,
-        isiArtikel,
-
-    } = req.body 
-
-
-    let qry = `UPDATE user 
-    SET nama = '${nama}',
-    userName = '${userName}',
-    password = '${password}',
-    tglLahir = '${tglLahir}',
-    jk = '${jk}'
-     WHERE idUser = '${id}'`
-
-    connection.query(qry, (error, result) => {
-        if (error) {
-            console.log(error);
-        } else {
-            response.ok('Data berhasil diubah', res)
-            console.log(result.affectedRows, 'Data berhasil diubah');
-
-        }
-    })
-
-}
-
-
-
-module.exports = {
-    getAllData,
-    getAllRenungan,
-    getAllNews,
-    getOneRenungan,
-    getOneNews,
-    addOneData,
-    deleteOneData,
-    editOneData
-
-}
+module.exports = artikel;
