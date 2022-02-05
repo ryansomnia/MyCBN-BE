@@ -4,9 +4,12 @@ const nodemailer = require('nodemailer');
 let dotenv = require('dotenv');
 let env = dotenv.config();
 const moment = require('moment');
+const fs = require('fs') 
+const {promisify} = require('util')
 const writeFile = promisify(fs.writeFile);
 const secretKey = process.env.SECRET_KEY;
 const folder = process.env.DIREKTORI_IMG;
+const Cryptr = require('cryptr')
 const cryptr = new Cryptr(secretKey);
 
 

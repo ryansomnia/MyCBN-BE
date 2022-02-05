@@ -241,15 +241,11 @@ let user = {
         }
     },
     getAllData : async(req, res) =>{
-
-
-
-
         try {
             let qry = 'SELECT * FROM user';
             let hasil = await connection.execQry(qry)
            
-            //    console.log(hasil);
+               console.log(hasil);
                let response = {
                 code: 200,
                 message: 'success',
