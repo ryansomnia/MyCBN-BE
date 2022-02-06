@@ -34,6 +34,8 @@ router.post('/cbn/v1/user/login', user.login);
 
 // //cbn ARTIKEL
 router.get('/cbn/v1/artikel/getAllArticle', artikel.getAllData );
+router.get('/cbn/v1/artikel/getDataArtikel', artikel.getDataArtikel );
+router.get('/cbn/v1/artikel/getDataRenungan', artikel.getDataRenungan );
 router.post('/cbn/v1/artikel/addOneArticle', artikel.addArtikel );
 // router.post('/editOneArticle', artikel.editOneData);
 // router.delete('/deleteOneArticle', artikel.deleteOneData );

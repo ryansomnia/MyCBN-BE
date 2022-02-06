@@ -52,6 +52,54 @@ let artikel = {
               res.status(400).send(response)
         }
     },
+    getDataArtikel: async(req, res)=>{
+      try {
+         
+          let qry = 'SELECT * FROM artikel WHERE kategori="artikel" ORDER BY waktuPembuatan DESC';
+          let hasil = await connection.execQry(qry)
+          let response = {
+              code: 200,
+              message: 'success',
+              data: hasil
+            };
+           console.log(response)
+            res.status(200).send(response)
+      return hasil
+
+      } catch (error) {
+          console.log(error);
+          let response = {
+              code: hasil.code,
+              message: hasil.message,
+              error:error
+            };
+            res.status(400).send(response)
+      }
+    },
+    getDataRenungan: async(req, res)=>{
+    try {
+       
+      let qry = 'SELECT * FROM artikel WHERE kategori="renungan" ORDER BY waktuPembuatan DESC';
+      let hasil = await connection.execQry(qry)
+        let response = {
+            code: 200,
+            message: 'success',
+            data: hasil
+          };
+         console.log(response)
+          res.status(200).send(response)
+    return hasil
+
+    } catch (error) {
+        console.log(error);
+        let response = {
+            code: hasil.code,
+            message: hasil.message,
+            error:error
+          };
+          res.status(400).send(response)
+    }
+    },
     addArtikel: async(req,res)=>{
         try {
 
