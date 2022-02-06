@@ -18,7 +18,8 @@ module.exports = async function (req,res,next) {
         let api =[
             "/cbn/v1/user/registrasi","/cbn/v1/user/ValidateAccount",
             "/cbn/v1/user/login","/cbn/v1/user/getuser",
-            "/cbn/v1/artikel/addOneArticle","/cbn/v1/artikel/getAllArticle"
+            "/cbn/v1/artikel/addOneArticle","/cbn/v1/artikel/getAllArticle",
+            "/cbn/v1/artikel/getDataArtikel","/cbn/v1/artikel/getDataRenungan"
         ];
 
         if((api.includes(req.url)) == false){
