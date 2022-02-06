@@ -4,11 +4,13 @@ const nodemailer = require('nodemailer');
 let dotenv = require('dotenv');
 let env = dotenv.config();
 const moment = require('moment');
+const multer = require('multer');
+
 const fs = require('fs') 
 const {promisify} = require('util')
 const writeFile = promisify(fs.writeFile);
 const secretKey = process.env.SECRET_KEY;
-const folder = process.env.DIREKTORI_IMG;
+const folder = process.env.DIREKTORI_IMG_DEV;
 const Cryptr = require('cryptr')
 const cryptr = new Cryptr(secretKey);
 
@@ -29,7 +31,7 @@ let artikel = {
     getAllData: async(req, res)=>{
         try {
            
-            let qry = 'SELECT * FROM user';
+            let qry = 'SELECT * FROM artikel';
             let hasil = await connection.execQry(qry)
             let response = {
                 code: 200,
@@ -64,7 +66,7 @@ let artikel = {
             res.status(400).send(response);
             return response;
           }
-          
+        console.log(judulArtikel);  
         let isiArtikel = req.body.isiArtikel
         if (isiArtikel == 0 || isiArtikel == null) {
 
@@ -101,20 +103,23 @@ let artikel = {
             }
             let waktuPembuatan = getTime();
            
-                let image = req.body.image
-                let splitbs64 = image.split(",") 
-                let splity = image.split("/")
-                let splitformat = splity[1].split(";")
-                let content = splitbs64[1];
-                console.log(content)
-                let ext_file = splitformat[0]
-                console.log(ext_file)
-                let encryptedString = cryptr.encrypt(judulArtikel);
-                let direk = `${folder}${encryptedString}.${ext_file}`;
-                let direkString = direk.toString()
 
-                await writeFile(direk, content, "base64");
-                let qry = `INSERT INTO artikel VALUES(${judulArtikel}, ${isiArtikel}, ${kategori}, ${tag}, ${waktuPembuatan}, ${direkString})`;
+                let image = req.body.image
+                console.log(image);
+                // let splitbs64 = image.split(",") 
+                // let splity = image.split("/")
+                // let splitformat = splity[1].split(";")
+                // let content = splitbs64[1];
+                // console.log(content)
+                // let ext_file = splitformat[0]
+                // console.log(ext_file)
+                // let encryptedString = cryptr.encrypt(judulArtikel);
+                // let direk = `${folder}${encryptedString}.${ext_file}`;
+                // let direkString = direk.toString()
+
+                // await writeFile(direk, content, "base64");
+  
+                let qry = `INSERT INTO artikel (judulArtikel, isiArtikel, kategori, tag, waktuPembuatan, image) VALUES('${judulArtikel}', '${isiArtikel}', '${kategori}', '${tag}', '${waktuPembuatan}', '${image}')`;
                 let hasil = await connection.execQry(qry)
                 let response = {
                     code: 200,

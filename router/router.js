@@ -1,17 +1,11 @@
 const express = require('express');
-// const auth = require('../middleware/auth');
 const router = express.Router();
-// const verifikasi = require('../middleware/verifikasi')
-// const validation = require('../middleware/validation')
 const user = require('../controller/User')
 const pastoral = require('../controller/Pastoral')
 const artikel = require('../controller/Artikel')
 // const doa = require('../controller/Prayer')
 const kka = require('../controller/KKA')
-// const cron = require("node-cron");
-// const { haltOnTimedout, errorFilter } = require('../helpers/connectTimeOut');
-
-// var timeout=require('connect-timeout');
+// const multer = require('multer');
 
 
 
@@ -39,8 +33,8 @@ router.post('/cbn/v1/user/login', user.login);
 // router.post('/cbn/v1/pastoral/pelayananKonseling', pastoral.getbyUser);
 
 // //cbn ARTIKEL
-router.get('/getAllArticle', artikel.getAllData );
-router.post('/addOneArticle', artikel.addArtikel );
+router.get('/cbn/v1/artikel/getAllArticle', artikel.getAllData );
+router.post('/cbn/v1/artikel/addOneArticle', artikel.addArtikel );
 // router.post('/editOneArticle', artikel.editOneData);
 // router.delete('/deleteOneArticle', artikel.deleteOneData );
 

@@ -17,7 +17,8 @@ module.exports = async function (req,res,next) {
     try {
         let api =[
             "/cbn/v1/user/registrasi","/cbn/v1/user/ValidateAccount",
-            "/cbn/v1/user/login","/cbn/v1/user/getuser"
+            "/cbn/v1/user/login","/cbn/v1/user/getuser",
+            "/cbn/v1/artikel/addOneArticle","/cbn/v1/artikel/getAllArticle"
         ];
 
         if((api.includes(req.url)) == false){
