@@ -4,7 +4,8 @@ const user = require('../controller/User')
 const pastoral = require('../controller/Pastoral')
 const artikel = require('../controller/Artikel')
 // const doa = require('../controller/Prayer')
-const kka = require('../controller/KKA')
+const kka = require('../controller/KKA');
+const verse = require('../controller/Verse');
 // const multer = require('multer');
 
 
@@ -39,6 +40,10 @@ router.get('/cbn/v1/artikel/getDataRenungan', artikel.getDataRenungan );
 router.post('/cbn/v1/artikel/addOneArticle', artikel.addArtikel );
 // router.post('/editOneArticle', artikel.editOneData);
 // router.delete('/deleteOneArticle', artikel.deleteOneData );
+
+// Verse
+router.get('/cbn/v1/artikel/addOneArticle', verse.getVerse );
+router.post('/cbn/v1/artikel/addOneArticle', verse.addVerse );
 
 // // cbn GET Renungan
 // router.get('/getAllRenungan', artikel.getAllRenungan );
