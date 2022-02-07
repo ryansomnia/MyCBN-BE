@@ -42,8 +42,8 @@ router.post('/cbn/v1/artikel/addOneArticle', artikel.addArtikel );
 // router.delete('/deleteOneArticle', artikel.deleteOneData );
 
 // Verse
-router.get('/cbn/v1/artikel/addOneArticle', verse.getVerse );
-router.post('/cbn/v1/artikel/addOneArticle', verse.addVerse );
+router.get('/cbn/v1/verse/getVerse', verse.getVerse );
+router.post('/cbn/v1/verse/addVerse', verse.addVerse );
 
 // // cbn GET Renungan
 // router.get('/getAllRenungan', artikel.getAllRenungan );

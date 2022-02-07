@@ -19,7 +19,8 @@ module.exports = async function (req,res,next) {
             "/cbn/v1/user/registrasi","/cbn/v1/user/ValidateAccount",
             "/cbn/v1/user/login","/cbn/v1/user/getuser",
             "/cbn/v1/artikel/addOneArticle","/cbn/v1/artikel/getAllArticle",
-            "/cbn/v1/artikel/getDataArtikel","/cbn/v1/artikel/getDataRenungan"
+            "/cbn/v1/artikel/getDataArtikel","/cbn/v1/artikel/getDataRenungan",
+            "/cbn/v1/verse/getVerse","/cbn/v1/verse/addVerse"
         ];
 
         if((api.includes(req.url)) == false){
