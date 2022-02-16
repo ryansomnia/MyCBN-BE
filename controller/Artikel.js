@@ -4,13 +4,12 @@ const nodemailer = require('nodemailer');
 let dotenv = require('dotenv');
 let env = dotenv.config();
 const moment = require('moment');
-// const multer = require('multer');
 
 const fs = require('fs') 
 const {promisify} = require('util')
 const writeFile = promisify(fs.writeFile);
 const secretKey = process.env.SECRET_KEY;
-const folder = process.env.DIREKTORI_IMG;
+const folder = process.env.DIREKTORI_IMG_DEV;
 const Cryptr = require('cryptr')
 const cryptr = new Cryptr(secretKey);
 
@@ -165,7 +164,7 @@ let artikel = {
                 let encryptedString = cryptr.encrypt(judulArtikel);
                 let direk = `${folder}${encryptedString}.${ext_file}`;
                 let direkString = direk.toString()
-
+console.log('vvvvv', direkString);
                 await writeFile(direk, content, "base64");
   
                 let qry = `INSERT INTO artikel (judulArtikel, isiArtikel, kategori, tag, waktuPembuatan, image) VALUES('${judulArtikel}', '${isiArtikel}', '${kategori}', '${tag}', '${waktuPembuatan}', '${direkString}')`;
