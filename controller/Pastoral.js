@@ -1,6 +1,6 @@
 'use strict';
 
-const connection = require('../config/connection');
+const connection = require('../config/MySQL');
 let dotenv = require('dotenv');
 let env = dotenv.config();
 const moment = require('moment');

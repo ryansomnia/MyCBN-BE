@@ -1,10 +1,11 @@
 'use strict';
 
-const connection = require('../config/connection');
+const connection = require('../config/MySQL');
 const nodemailer = require('nodemailer');
 let dotenv = require('dotenv');
 let env = dotenv.config();
 const moment = require('moment');
+const jwt = require("jsonwebtoken");
 
 let checknumber = (data) => {
   let reg = new RegExp("^[0-9]+$");
@@ -323,133 +324,6 @@ let user = {
       
     
     },
-    otpMailConfirmation : (email, otp) => {
-     
-      try{
-     
-        let transporter = nodemailer.createTransport({
-                             service: 'gmail',
-                              auth: {
-                                  user: process.env.core_email,
-                                  pass: process.env.core_pw_email
-                              },
-                              port: 465,
-                              secure: true
-                });
-                
-            
-                var mailOptions = {
-                    from: process.env.core_email,
-                    to: email,
-                    subject: 'Verivikasi email',
-                    text: `Sliahkan input ${otp} untuk kode OTP `
-                   
-                };
-
-              transporter.sendMail(mailOptions, (err, info) => {
-console.log(mailOptions);
-              if (err) {
-                let error = {
-                  code: 400,
-                  message: 'Error',
-                  error: err
-                };
-                console.log(error) 
-                return error;
-                
-              } else {
-                let success = {
-                  code: 200,
-                  message: 'Success',
-                  success: 'Email terkirim: ' + info.response
-                };
-                console.log(success) 
-                return success;
-            
-              }
-
-                });
-
-
-    } catch (error) {
-               
-
-      let response = {
-      code: hasil.code,
-      message: hasil.message,
-      error:error
-    };
-    console.log(response);
-    res.status(400).send(response)
-    }
-      },
-    validateAccount : async(req, res ) => {
-      let idRegis = req.body.idRegis
-      let otp = req.body.otp
-      if (otp == 0 || otp == null) {
-
-        let response = {
-            code: 400,
-            message: 'Error',
-            error:'otp tidak terisi'
-          };
-        
-  
-        res.status(400).send(response);
-        return response;
-      } 
-      if (idRegis == 0 || idRegis == null) {
-
-        let response = {
-            code: 400,
-            message: 'Error',
-            error:'idRegis tidak terisi'
-          };
-        
-  
-        res.status(400).send(response);
-        return response;
-      } 
-
-      try {
-        let qry = `CALL validateAccount ('${idRegis}', '${otp}')`
-        
-        let hasil = await connection.execSP(qry)
-
-        console.log(hasil);
-
-        if (hasil.code === 200){
-          let response = {
-              code: 200,
-              message: 'success',
-              description: 'OTP Valid'
-          };
-              console.log(response)
-              res.status(200).send(response)
-              return response
-
-        } else {
-              let response = {
-                code: hasil.code,
-                message: hasil.message,
-                error: hasil.description
-            };
-                console.log(response) 
-                res.status(400).send(response)
-                return response
-    }
-      } catch (err) {
-            let response = {
-              code: 500,
-              message: error,
-              error:err
-            };
-                console.log(response);
-                res.status(400).send(response)
-                return response
-
-          }
-      },
     login : async(req, res ) => {
         let username = req.body.username
         let password = req.body.password
@@ -483,15 +357,22 @@ console.log(mailOptions);
           
           let hasil = await connection.execSP(qry)
   
-          console.log(hasil);
-  
           if (hasil.code === 200){
+            let token = jwt.sign({ hasil }, process.env.SECRET_KEY, {
+              expiresIn: Math.floor(new Date() / 1000),
+              algorithm: "HS256"
+            });
             let response = {
                 code: 200,
                 message: hasil.message,
-                data: hasil.data
+                data: {
+                username: username,
+              // fullName: hasil.fullName,
+              // status: hasil.status,
+            accessToken: token
+          }
             };
-                console.log(response)
+            
                 res.status(200).send(response)
                 return response
   
@@ -508,7 +389,7 @@ console.log(mailOptions);
         } catch (err) {
               let response = {
                 code: 500,
-                message: error,
+                message: err,
                 error:err
               };
                   console.log(response);

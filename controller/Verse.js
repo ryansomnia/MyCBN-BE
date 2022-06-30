@@ -1,5 +1,5 @@
 'use strict';
-let connection = require('../config/connection');
+let connection = require('../config/MySQL');
 let dotenv = require('dotenv');
 let env = dotenv.config();
 const fs = require('fs') 

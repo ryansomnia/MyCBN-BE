@@ -17,3 +17,6 @@ Dockerfile
 .env
 .env
 .DS_Store
+.env
+.gitignore
+config/connection.js

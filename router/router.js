@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const verikasi = require('../middleware/validation')
 const user = require('../controller/User')
 const pastoral = require('../controller/Pastoral')
 const artikel = require('../controller/Artikel')
@@ -11,12 +12,11 @@ const verse = require('../controller/Verse');
 
 
 // // cbn USER
-router.get('/cbn/v1/user/getuser', user.getAllData);
+router.get('/cbn/v1/user/getuser', verikasi.validation(), user.getAllData);
 router.post('/cbn/v1/user/registrasi', user.registrasi);
 router.post('/cbn/v1/user/deleteAccount', user.deleteAccount);
-router.post('/cbn/v1/user/otpMailConfirmation', user.otpMailConfirmation);
-router.post('/cbn/v1/user/validateAccount', user.validateAccount);
 router.post('/cbn/v1/user/login', user.login);
+
 
 
 

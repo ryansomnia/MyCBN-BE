@@ -7,8 +7,16 @@ const app = express();
 // const path = require('path');
 const cors = require('cors');
 const ejs = require('ejs');
+// const newrelic = require('newrelic');
+  
+// const storage = multer.diskStorage({
+//   destination: (req, file, callback) =>{
+//       callback(null, "./assets/image")
+
+//   }
 
 
+// })
 //setting cors
 app.options('*', cors());
 
@@ -55,8 +63,7 @@ app.all('/*', function (req, res, next) {
 
 app.use('/', require('./router/router'))
 
-app.all('/cbn/v1/*', [require('./middleware/validation')]);
-// app.all('/myaccessapi/v2/*', [require('./middlewares/validate2')]);
+// app.all('/cbn/v1/*', [require('./middleware/validation')]);
 
 app.use(function (req, res, next) {
     console.log(req.header);
@@ -80,3 +87,4 @@ app.listen(process.env.PORT, () => {
 //   }
 //   //handle normal errors
 // });
+
