@@ -8,11 +8,11 @@ exports.execSP = async (query) => {
    
     try{
         const connect =  await mysql2.createConnection({
-            host: process.env.local_HOST,
-            // port: process.env.local_PORT,
-            user: process.env.local_USERNAME,
-            password: process.env.local_PASSWORD,
-            database: process.env.local_DATABASE,
+            host: process.env.vpn_HOST,
+            // port: process.env.vpn_PORT,
+            user: process.env.vpn_USERNAME,
+            password: process.env.vpn_PASSWORD,
+            database: process.env.vpn_DATABASE,
 
         })
         
@@ -67,11 +67,11 @@ exports.execQry = async (query) => {
    
     try{
         const connect =  await mysql2.createConnection({
-            host: process.env.local_HOST,
-            // port: process.env.local_PORT,
-            user: process.env.local_USERNAME,
-            password: process.env.local_PASSWORD,
-            database: process.env.local_DATABASE
+            host: process.env.vpn_HOST,
+            // port: process.env.vpn_PORT,
+            user: process.env.vpn_USERNAME,
+            password: process.env.vpn_PASSWORD,
+            database: process.env.vpn_DATABASE
         })
         
         return new Promise ((resolve, reject) =>{
