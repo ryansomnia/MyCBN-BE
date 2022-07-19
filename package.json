@@ -45,5 +45,8 @@
   "bugs": {
     "url": "https://github.com/ryansomnia/MyCBN-BE/issues"
   },
-  "homepage": "https://github.com/ryansomnia/MyCBN-BE#readme"
+  "homepage": "https://github.com/ryansomnia/MyCBN-BE#readme",
+  "devDependencies": {
+    "jest": "^28.1.2"
+  }
 }

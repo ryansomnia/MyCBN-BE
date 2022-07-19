@@ -2,21 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const app = express();
-// const moment = require('moment');
-// const multer = require('multer');
-// const path = require('path');
 const cors = require('cors');
 const ejs = require('ejs');
 // const newrelic = require('newrelic');
-  
-// const storage = multer.diskStorage({
-//   destination: (req, file, callback) =>{
-//       callback(null, "./assets/image")
 
-//   }
-
-
-// })
 //setting cors
 app.options('*', cors());
 
@@ -27,6 +16,7 @@ let env = dotenv.config();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
 
 
 //Static Files
@@ -62,9 +52,6 @@ app.all('/*', function (req, res, next) {
   });
 
 app.use('/', require('./router/router'))
-
-// app.all('/cbn/v1/*', [require('./middleware/validation')]);
-
 app.use(function (req, res, next) {
     console.log(req.header);
     let ress = {
@@ -80,11 +67,3 @@ app.listen(process.env.PORT, () => {
     console.log(`Server running in ${process.env.PORT}`);
 
 })
-// req.on('error', function(err) {
-//   if (err.code === "ECONNRESET") {
-//       console.log("Timeout occurs");
-//       return;
-//   }
-//   //handle normal errors
-// });
-

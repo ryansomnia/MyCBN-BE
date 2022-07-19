@@ -7,6 +7,7 @@ const artikel = require('../controller/Artikel')
 // const doa = require('../controller/Prayer')
 const kka = require('../controller/KKA');
 const verse = require('../controller/Verse');
+const upload = require('../helpers/uploadImage');
 // const multer = require('multer');
 
 
@@ -37,7 +38,7 @@ router.post('/cbn/v1/user/login', user.login);
 router.get('/cbn/v1/artikel/getAllArticle', artikel.getAllData );
 router.get('/cbn/v1/artikel/getDataArtikel', artikel.getDataArtikel );
 router.get('/cbn/v1/artikel/getDataRenungan', artikel.getDataRenungan );
-router.post('/cbn/v1/artikel/addOneArticle', artikel.addArtikel );
+router.post('/cbn/v1/artikel/addOneArticle', upload.single('file'),artikel.addArtikel );
 // router.post('/editOneArticle', artikel.editOneData);
 // router.delete('/deleteOneArticle', artikel.deleteOneData );
 
