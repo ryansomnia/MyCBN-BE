@@ -1,7 +1,6 @@
 const connection = require('../config/MySQL');
 let dotenv = require('dotenv');
 let env = dotenv.config();
-const moment = require('moment');
 
 let checknumber = (data) => {
   let reg = new RegExp("^[0-9]+$");

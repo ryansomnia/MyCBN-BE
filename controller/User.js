@@ -1,7 +1,6 @@
 'use strict';
 
 const connection = require('../config/MySQL');
-const nodemailer = require('nodemailer');
 let dotenv = require('dotenv');
 let env = dotenv.config();
 const moment = require('moment');
