@@ -4,13 +4,13 @@ const morgan = require('morgan');
 const app = express();
 const cors = require('cors');
 const ejs = require('ejs');
+const FileUpload = require('express-fileupload')
 // const newrelic = require('newrelic');
-
 //setting cors
 app.options('*', cors());
 
-
-
+app.use(express.static('public'));
+app.use(FileUpload());
 let dotenv = require('dotenv');
 let env = dotenv.config();
 
@@ -20,7 +20,6 @@ app.use(bodyParser.json());
 
 
 //Static Files
-app.use(express.static('public'))
 app.use('/css', express.static(__dirname + 'public/css'))
 
 //Set Templating Engine

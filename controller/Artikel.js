@@ -2,9 +2,11 @@
 // let connection = require('../config/Mongodb/Mongodb');
 let dotenv = require('dotenv');
 let env = dotenv.config();
+const mongodb = require('mongodb');
 const MongoClient = require("mongodb").MongoClient;
 const client = new MongoClient(process.env.URI);
-
+const path = require('path')
+const fs = require('fs')
         // function getTime() {
         //     let asiaTimeStart = new Date().toLocaleString("en-US", {
         //           timeZone: "Asia/Jakarta",
@@ -214,6 +216,163 @@ let artikel = {
             console.log(err);
         }
 //              
+    },
+    addArtikelB: async(req,res)=>{
+
+      let judulArtikel = req.body.judulArtikel
+              if (judulArtikel == 0 || judulArtikel == null) {
+      
+                  let response = {
+                      code: 400,
+                      message: 'Error',
+                      error:'Judul Artikel tidak terisi'
+                    };      
+                  res.status(400).send(response);
+                  return response;
+                }
+                
+              let isiArtikel = req.body.isiArtikel
+              if (isiArtikel == 0 || isiArtikel == null) {
+      
+                  let response = {
+                      code: 400,
+                      message: 'Error',
+                      error:'Isi Artikel tidak terisi'
+                    };      
+                  res.status(400).send(response);
+                  return response;
+                }
+      
+              let kategori = req.body.kategori
+              if (kategori == 0 || kategori == null) {
+        
+                    let response = {
+                        code: 400,
+                        message: 'Error',
+                        error:'kategori tidak terisi'
+                      };      
+                    res.status(400).send(response);
+                    return response;
+                  }
+              let tag = req.body.tag
+              if (tag == 0 || tag == null) {
+          
+                   let response = {
+                        code: 400,
+                        message: 'Error',
+                        error:'tag tidak terisi'
+                      };      
+                    res.status(400).send(response);
+                    return response;
+                  }
+              let waktuPembuatan = new Date();
+
+              let image = req.files.image;
+              console.log(image);
+              let filesize = image.size;
+              let ext = path.extname(image.name);
+              let filename = image.md5 + ext;
+              const url = `${req.protocol}://${req.get("host")}/images/${filename}`;
+              let allowedType = ['.png', '.jpg', '.jpeg'];
+
+              if (!allowedType.includes(ext.toLowerCase())) {
+                return res.status(422).json({msg: "invalid Image"})
+              }
+              if (filesize > 5000000) {
+                return res.status(422).json({msg: " Size overload"})
+              }
+           
+              if (image   == 0 ||  image   == null) {
+         
+                let response = {
+                     code: 400,
+                     message: 'Error',
+                     error:'articleImage   tidak terisi'
+                   };      
+                 res.status(400).send(response);
+                 return response;
+               }
+              image.mv(`./public/images/${filename}`,async(err)=>{
+                if(err){
+                  return res.status(500).json({msg: err.message});
+                }
+
+                try {
+                  await client.connect()
+                  .then( () => {
+                  console.log('Connected to the database ')
+                })
+                  .catch( (err) => {
+                  console.error(`Error connecting to the database. ${err}`);
+                })
+        
+                const db = client.db('MyCBN');
+                const collection = db.collection('article')
+                let objectArticle = {
+                  judulArtikel : `${judulArtikel}`,
+                  isiArtikel : `${isiArtikel}`,
+                  kategori : `${kategori}`,
+                  tag : `${tag}`,
+                  waktuPembuatan : `${waktuPembuatan}`,
+                  image : `${filename}`,
+                  url: `${url}`
+        
+                }
+                // console.log(objectArticle);
+                let result = await collection.insertOne(objectArticle);
+                let response = {
+                          code: 200,
+                          message: 'success',
+                          data:result
+                        };
+                        res.status(200).send(response)
+              
+        
+                } catch(err){
+                    console.log(err);
+                }
+
+              })
+        
+//              
+    },
+    deleteOneData : async(req,res)=>{
+      let id = req.body.id
+     console.log(id);
+      try {
+        await client.connect()
+        .then( () => {
+        console.log('Connected to the database ')
+      })
+        .catch( (err) => {
+        console.error(`Error connecting to the database. ${err}`);
+      })
+
+      const db = client.db('MyCBN');
+      const collection = db.collection('article')
+      let data = await collection.findOne({_id : new mongodb.ObjectId(id)});
+      const filePath = `./public/images/${data.image}`
+        fs.unlinkSync(filePath);
+        let result = await collection.deleteOne({_id : new mongodb.ObjectId(id)});
+      if (0 < result.deletedCount) {
+        let response = {
+          code: 200,
+          message: 'success delete',
+          data:result
+        };
+        res.status(200).send(response)
+      } else{
+        let response = {
+        code: 401,
+        message: 'cant delete'
+      };
+      res.status(401).send(response)
+      }
+      
+
+      } catch (error) {
+        console.log(error);
+      }
     }
 }
 module.exports = artikel;

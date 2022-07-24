@@ -7,11 +7,19 @@ const artikel = require('../controller/Artikel')
 // const doa = require('../controller/Prayer')
 const kka = require('../controller/KKA');
 const verse = require('../controller/Verse');
-const upload = require('../helpers/uploadImage');
-// const multer = require('multer');
+// const upload = require('../helpers/uploadImage');
+const multer = require('multer');
 
+const storage = multer.diskStorage({
+    destination: (req,file,callback) => {
+        callback(null, "./aset");
+    },
+    filename: (req, file, callback) => {
+        callback(null, file.originalname);
+    }
+})
 
-
+const upload = multer({ storage : storage })
 // // cbn USER
 router.get('/cbn/v1/user/getuser', verikasi.validation(), user.getAllData);
 router.post('/cbn/v1/user/registrasi', user.registrasi);
@@ -38,9 +46,10 @@ router.post('/cbn/v1/user/login', user.login);
 router.get('/cbn/v1/artikel/getAllArticle', artikel.getAllData );
 router.get('/cbn/v1/artikel/getDataArtikel', artikel.getDataArtikel );
 router.get('/cbn/v1/artikel/getDataRenungan', artikel.getDataRenungan );
-router.post('/cbn/v1/artikel/addOneArticle', upload.single('file'),artikel.addArtikel );
+// router.post('/cbn/v1/artikel/addOneArticle', upload.single('file'),artikel.addArtikel );
+router.post('/cbn/v1/artikel/addOneArticleB',artikel.addArtikelB );
 // router.post('/editOneArticle', artikel.editOneData);
-// router.delete('/deleteOneArticle', artikel.deleteOneData );
+router.post('/cbn/v1/artikel/deleteOneArticle', artikel.deleteOneData );
 
 // Verse
 router.get('/cbn/v1/verse/getVerse', verse.getVerse );
