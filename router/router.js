@@ -43,13 +43,13 @@ router.post('/cbn/v1/user/login', user.login);
 // router.post('/cbn/v1/pastoral/pelayananKonseling', pastoral.getbyUser);
 
 // //cbn ARTIKEL
-router.get('/cbn/v1/artikel/getAllArticle', artikel.getAllData );
-router.get('/cbn/v1/artikel/getDataArtikel', artikel.getDataArtikel );
-router.get('/cbn/v1/artikel/getDataRenungan', artikel.getDataRenungan );
-// router.post('/cbn/v1/artikel/addOneArticle', upload.single('file'),artikel.addArtikel );
-router.post('/cbn/v1/artikel/addOneArticleB',artikel.addArtikelB );
-// router.post('/editOneArticle', artikel.editOneData);
-router.post('/cbn/v1/artikel/deleteOneArticle', artikel.deleteOneData );
+// router.get('/cbn/v1/artikel/getAllArticle', artikel.getAllData );
+// router.get('/cbn/v1/artikel/getDataArtikel', artikel.getDataArtikel );
+// router.get('/cbn/v1/artikel/getDataRenungan', artikel.getDataRenungan );
+// // router.post('/cbn/v1/artikel/addOneArticle', upload.single('file'),artikel.addArtikel );
+// router.post('/cbn/v1/artikel/addOneArticleB',artikel.addArtikelB );
+// // router.post('/editOneArticle', artikel.editOneData);
+// router.post('/cbn/v1/artikel/deleteOneArticle', artikel.deleteOneData );
 
 // Verse
 router.get('/cbn/v1/verse/getVerse', verse.getVerse );
