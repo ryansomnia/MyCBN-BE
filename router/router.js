@@ -46,7 +46,7 @@ router.post('/cbn/v1/user/login', user.login);
 router.get('/cbn/v1/artikel/getAllArticle',verikasi.validation(), artikel.getAllData );
 router.get('/cbn/v1/artikel/getDataArtikel',verikasi.validation(), artikel.getDataArtikel );
 router.get('/cbn/v1/artikel/getDataRenungan',verikasi.validation(), artikel.getDataRenungan );
-router.post('/cbn/v1/artikel/addOneArticleB',verikasi.validation(), artikel.addArtikel );
+router.post('/cbn/v1/artikel/addOneArticle',verikasi.validation(), artikel.addArtikel );
 // router.post('/editOneArticle', artikel.editOneData);
 router.post('/cbn/v1/artikel/deleteOneArticle', verikasi.validation(), artikel.deleteOneData );
 
