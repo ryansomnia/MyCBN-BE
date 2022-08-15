@@ -43,16 +43,16 @@ router.post('/cbn/v1/user/login', user.login);
 // router.post('/cbn/v1/pastoral/pelayananKonseling', pastoral.getbyUser);
 
 // //cbn ARTIKEL
-router.get('/cbn/v1/artikel/getAllArticle', artikel.getAllData );
-router.get('/cbn/v1/artikel/getDataArtikel', artikel.getDataArtikel );
-router.get('/cbn/v1/artikel/getDataRenungan', artikel.getDataRenungan );
-router.post('/cbn/v1/artikel/addOneArticleB',artikel.addArtikel );
+router.get('/cbn/v1/artikel/getAllArticle',verikasi.validation(), artikel.getAllData );
+router.get('/cbn/v1/artikel/getDataArtikel',verikasi.validation(), artikel.getDataArtikel );
+router.get('/cbn/v1/artikel/getDataRenungan',verikasi.validation(), artikel.getDataRenungan );
+router.post('/cbn/v1/artikel/addOneArticleB',verikasi.validation(), artikel.addArtikel );
 // router.post('/editOneArticle', artikel.editOneData);
-router.post('/cbn/v1/artikel/deleteOneArticle', artikel.deleteOneData );
+router.post('/cbn/v1/artikel/deleteOneArticle', verikasi.validation(), artikel.deleteOneData );
 
 // Verse
-router.get('/cbn/v1/verse/getVerse', verse.getVerse );
-router.post('/cbn/v1/verse/addVerse', verse.addVerse );
+router.get('/cbn/v1/verse/getVerse', verikasi.validation(), verse.getVerse );
+router.post('/cbn/v1/verse/addVerse', verikasi.validation(), verse.addVerse );
 
 // // cbn GET Renungan
 // router.get('/getAllRenungan', artikel.getAllRenungan );
