@@ -9,7 +9,8 @@ const secretKey = process.env.SECRET_KEY;
 const folder = process.env.DIREKTORI_IMG_DEV;
 const Cryptr = require('cryptr')
 const cryptr = new Cryptr(secretKey);
-
+const MongoClient = require("mongodb").MongoClient;
+const client = new MongoClient(process.env.URI);
 
         function getTime() {
             let asiaTimeStart = new Date().toLocaleString("en-US", {
@@ -25,34 +26,41 @@ const cryptr = new Cryptr(secretKey);
 let verse = {
 
     getVerse: async(req, res)=>{
-        try {
-           
-            let qry = 'SELECT * FROM verse LIMIT 1';
-            let hasil = await connection.execQry(qry)
-            let response = {
+      try {       
+
+        await client.connect()
+        .then( () => {
+        console.log('Connected to the database ')
+      })
+        .catch( (err) => {
+        console.error(`Error connecting to the database. ${err}`);
+      })
+      
+      const db = client.db('MyCBN');
+      const collection = db.collection('verse')
+      let result = await collection.aggregate([{$sample:{size:1}}]).toArray();
+      console.log(result);
+      let response = {
                 code: 200,
                 message: 'success',
-                data: hasil
+                data:result
               };
-             console.log(response)
               res.status(200).send(response)
-        return hasil
-
-        } catch (error) {
-            console.log(error);
-            let response = {
-                code: hasil.code,
-                message: hasil.message,
-                error:error
-              };
-              res.status(400).send(response)
-        }
+    }catch(err){
+     let error = {
+      code: 500,
+      message: 'error',
+      error:err
+    };
+      console.log(error);
+      res.status(500).send(error)
+    }
     },
     addVerse: async(req,res)=>{
         try {
 
-        let isiAyat = req.body.isiAyat
-        if (isiAyat == 0 || isiAyat == null) {
+        let isi = req.body.isi
+        if (isi == 0 || isi == null) {
 
             let response = {
                 code: 400,
@@ -62,8 +70,8 @@ let verse = {
             res.status(400).send(response);
             return response;
           } 
-        let Kitab = req.body.Kitab
-        if (Kitab == 0 || Kitab == null) {
+        let kitab = req.body.kitab
+        if (kitab == 0 || kitab == null) {
 
             let response = {
                 code: 400,
@@ -74,35 +82,53 @@ let verse = {
             return response;
           }
 
-          let pasalAyat = req.body.pasalAyat
-          if (pasalAyat == 0 || pasalAyat == null) {
+          let pasal = req.body.pasal
+          if (pasal == 0 || pasal == null) {
   
               let response = {
                   code: 400,
                   message: 'Error',
-                  error:'pasalAyat tidak terisi'
+                  error:'pasal tidak terisi'
                 };      
               res.status(400).send(response);
               return response;
             }
-                let qry = `INSERT INTO gppkcbn.verse VALUES(${isiAyat},${Kitab},${pasalAyat})`
-                let hasil = await connection.execQry(qry)
+            let ayat = req.body.ayat
+            if (ayat == 0 || ayat == null) {
+    
                 let response = {
-                    code: 200,
-                    message: 'success',
-                  };
-                 console.log(response)
-                  res.status(200).send(response)
-            return hasil
+                    code: 400,
+                    message: 'Error',
+                    error:'ayat tidak terisi'
+                  };      
+                res.status(400).send(response);
+                return response;
+              }
+              const db = client.db('MyCBN');
+              const collection = db.collection('verse')
+
+              let objectVerse = {
+                "kitab" : `${kitab}`,
+                "pasal" : pasal,
+                "ayat" : ayat,
+                "isi" : `${isi}`
+              }
+              let result = await collection.insertOne(objectVerse);
+              let response = {
+                code: 200,
+                message: 'success',
+                data:result
+              };
+              res.status(200).send(response)
     
         } catch (error) {
             console.log(error);
             let response = {
-                code: hasil.code,
-                message: hasil.message,
+                code: 500,
+                message: 'error',
                 error:error
               };
-              res.status(400).send(response)
+              res.status(500).send(response)
         }
     }
 
