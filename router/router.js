@@ -45,6 +45,7 @@ router.post('/cbn/v1/user/login', user.login);
 // //cbn ARTIKEL
 router.get('/cbn/v1/artikel/getAllArticle',verikasi.validation(), artikel.getAllData );
 router.get('/cbn/v1/artikel/getDataArtikel',verikasi.validation(), artikel.getDataArtikel );
+router.get('/cbn/v1/artikel/getOneDetail',verikasi.validation(), artikel.getOneDetail );
 router.get('/cbn/v1/artikel/getDataRenungan',verikasi.validation(), artikel.getDataRenungan );
 router.post('/cbn/v1/artikel/addOneArticle',verikasi.validation(), artikel.addArtikel );
 // router.post('/editOneArticle', artikel.editOneData);
@@ -70,8 +71,10 @@ router.post('/cbn/v1/verse/addVerse', verikasi.validation(), verse.addVerse );
 
 
 // //cbn KKA
-router.get('/cbn/v1/KKA/getListKKA', kka.getListKKA );
+router.get('/cbn/v1/KKA/getListKKA', verikasi.validation(),kka.getListKKA );
 router.post('/cbn/v1/KKA/registrasiKKA', kka.registrasiKKA );
+router.get('/cbn/v1/KKA/absen/getCode',verikasi.validation(),  kka.getCode);
+router.post('/cbn/v1/KKA/absen/submitCode',verikasi.validation(), kka.submitCode);
 
 
 

@@ -90,6 +90,45 @@ let artikel = {
         res.status(500).send(response)
       }
     },
+    getOneDetail: async(req, res)=>{
+      let id = req.body.id
+      try {
+        await client.connect()
+        .then( () => {
+        console.log('Connected to the database ')
+      })
+        .catch( (err) => {
+        console.error(`Error connecting to the database. ${err}`);
+      })
+
+      const db = client.db('MyCBN');
+      const collection = db.collection('article')
+      let result = await collection.findOne({_id: mongodb.ObjectId(id)});
+      if (0 < Object.keys(result).length) {
+        let response = {
+          code: 200,
+          message: 'success',
+          data:result
+        };
+        res.status(200).send(response)
+      } else {
+        let response = {
+          code: 201,
+          message: 'success',
+          data:[]
+        };
+        res.status(201).send(response)
+      }
+   
+      } catch (error) {
+        let response = {
+          code: 500,
+          message: 'error',
+          data:error
+        };
+        res.status(500).send(response)
+      }
+    },
     getDataRenungan: async(req, res)=>{
       try {
         await client.connect()

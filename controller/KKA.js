@@ -34,9 +34,49 @@ let KKA = {
               res.status(400).send(response)
         }
     },
-    // createDataKKA : async(req, res)=>{
-
-    // },
+    getCode : async(req, res)=>{
+      try {
+        let qry = '';
+        let hasil = await connection.execQry(qry)
+           let response = {
+            code: 200,
+            message: 'success',
+            data: hasil
+          };
+         console.log(response)
+          res.status(200).send(response)
+    return hasil
+    } catch (error) {
+      console.log(error);
+      let response = {
+          code: hasil.code,
+          message: hasil.message,
+          error:error
+        };
+        res.status(400).send(response)
+  }},
+    submitCode: async(req,res) =>{
+      try {
+        let qry = '';
+        let hasil = await connection.execQry(qry)
+           let response = {
+            code: 200,
+            message: 'success',
+            data: hasil
+          };
+         console.log(response)
+          res.status(200).send(response)
+    return hasil
+    } catch (error) {
+      console.log(error);
+      let response = {
+          code: hasil.code,
+          message: hasil.message,
+          error:error
+        };
+        res.status(400).send(response)
+  }
+    },
     registrasiKKA : async(req, res) => {
 
         let username = req.body.username

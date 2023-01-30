@@ -355,20 +355,19 @@ let user = {
           let qry = `CALL login ('${username}', '${password}')`
           
           let hasil = await connection.execSP(qry)
-  
+  console.log(hasil);
           if (hasil.code === 200){
             let token = jwt.sign({ hasil }, process.env.SECRET_KEY, {
               expiresIn: Math.floor(new Date() / 1000),
               algorithm: "HS256"
             });
+
             let response = {
                 code: 200,
                 message: hasil.message,
                 data: {
                 username: username,
-              // fullName: hasil.fullName,
-              // status: hasil.status,
-            accessToken: token
+                accessToken: token
           }
             };
             
