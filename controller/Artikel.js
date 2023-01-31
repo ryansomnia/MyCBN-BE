@@ -92,6 +92,7 @@ let artikel = {
     },
     getOneDetail: async(req, res)=>{
       let id = req.body.id
+      console.log('1',id);
       try {
         await client.connect()
         .then( () => {
@@ -104,12 +105,14 @@ let artikel = {
       const db = client.db('MyCBN');
       const collection = db.collection('article')
       let result = await collection.findOne({_id: mongodb.ObjectId(id)});
+      console.log('2',result);
       if (0 < Object.keys(result).length) {
         let response = {
           code: 200,
           message: 'success',
           data:result
         };
+        console.log('3');
         res.status(200).send(response)
       } else {
         let response = {
@@ -117,6 +120,7 @@ let artikel = {
           message: 'success',
           data:[]
         };
+        console.log('4');
         res.status(201).send(response)
       }
    
@@ -126,6 +130,7 @@ let artikel = {
           message: 'error',
           data:error
         };
+        console.log('5', error);
         res.status(500).send(response)
       }
     },
