@@ -362,6 +362,9 @@ let user = {
               algorithm: "HS256"
             });
 
+            let qry = `SELECT * FROM user WHERE username = '${username}'`
+            let dataUser = await connection.execQry(qry)
+            console.log('dataUser',dataUser);
             let response = {
                 code: 200,
                 message: hasil.message,
