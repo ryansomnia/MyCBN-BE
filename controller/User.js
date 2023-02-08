@@ -369,15 +369,15 @@ let user = {
                 code: 200,
                 message: hasil.message,
                 data: {
-                username: dataUser.username,
-                fullName: dataUser.fullName,
-                sex: dataUser.sex,
-                role: dataUser.role,
-                address: dataUser.address,
-                email: dataUser.email,
-                handphone: dataUser.handphone,
-                status: dataUser.status,
-                codeKKA: dataUser.codeKKA,
+                username: dataUser[0].username,
+                fullName: dataUser[0].fullName,
+                sex: dataUser[0].sex,
+                role: dataUser[0].role,
+                address: dataUser[0].address,
+                email: dataUser[0].email,
+                handphone: dataUser[0].handphone,
+                status: dataUser[0].status,
+                codeKKA: dataUser[0].codeKKA,
                 accessToken: token
           }
             };
