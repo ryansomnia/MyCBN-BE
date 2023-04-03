@@ -3,6 +3,7 @@ const router = express.Router();
 const verikasi = require('../middleware/validation')
 const user = require('../controller/User')
 const pastoral = require('../controller/Pastoral')
+const admin = require('../controller/Admin')
 const artikel = require('../controller/Artikel')
 // const doa = require('../controller/Prayer')
 const kka = require('../controller/KKA');
@@ -20,13 +21,17 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage : storage })
-// // cbn USER
+ // cbn USER
 router.get('/cbn/v1/user/getuser', verikasi.validation(), user.getAllData);
 router.post('/cbn/v1/user/registrasi', user.registrasi);
 router.post('/cbn/v1/user/deleteAccount', user.deleteAccount);
 router.post('/cbn/v1/user/login', user.login);
 
-
+// cbn ADMIN
+// router.get('/cbn/v1/admin/getuser', verikasi.validation(), user.getAllData);
+router.post('/cbn/v1/admin/registrasi', admin.register);
+// router.post('/cbn/v1/admin/deleteAccount', user.deleteAccount);
+router.post('/cbn/v1/admin/login', admin.login);
 
 
 // router.post('/adduser', user.addOneData);

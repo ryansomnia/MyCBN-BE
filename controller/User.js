@@ -188,11 +188,9 @@ let user = {
           } 
 
           let date = moment(Date.now()).format('DD')
-     
           var val = Math.floor(100 + Math.random() * 900);
-        console.log(val);
           let idReg = `${date}${val}`
-          console.log(idReg);
+        
         try {
             let qry = `CALL register('${idReg}','${username}', '${password}', '${fullName}', '${sex}', '${address}', '${email}', '${handphone}')`;
             let hasil = await connection.execSP(qry)
