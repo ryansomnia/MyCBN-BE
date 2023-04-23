@@ -1,4 +1,5 @@
 const connection = require('../config/MySQL');
+const timeSetting = require('../helpers/timeSetting');
 let dotenv = require('dotenv');
 let env = dotenv.config();
 
@@ -36,28 +37,49 @@ let KKA = {
     },
     getCode : async(req, res)=>{
       try {
-        let qry = '';
+          let dateNow = timeSetting.getCurrentTime()
+          let username = req.body.username
+          let persembahanGereja = req.body.persembahanGereja
+          let kasKKA = req.body.kasKKA
+        let qry = `SELECT a.username, a.fullName, b.codeKKA, b.nama, 
+        b.wilayah
+         FROM user a
+        INNER JOIN kka b ON a.codeKKA = b.codeKKA
+        WHERE a.username = '${username}'`;
+
         let hasil = await connection.execQry(qry)
-           let response = {
-            code: 200,
-            message: 'success',
-            data: hasil
-          };
-         console.log(response)
+console.log(hasil);
+
+        let insertQry = `INSERT INTO kkaReport (codeKKA, waktu, tempat, persembahanGereja, kasKKA)
+        VALUES ('${hasil[0].codeKKA}', '${hasil[0].dateNow}', '${hasil[0].wialyah}', '${hasil[0].persembahanGereja}', ${hasil[0].kasKKA})`
+        
+        let hasilInsert = await connection.execQry(insertQry);
+        
+        console.log(hasilInsert);
+        //  let response = {
+          //   code: 200,
+          //   message: 'success',
+          //   data: hasil
+          // };
+  //        console.log(response)
           res.status(200).send(response)
     return hasil
     } catch (error) {
-      console.log(error);
-      let response = {
-          code: hasil.code,
-          message: hasil.message,
-          error:error
-        };
-        res.status(400).send(response)
+  //     console.log(error);
+  //     let response = {
+  //         code: hasil.code,
+  //         message: hasil.message,
+  //         error:error
+  //       };
+  //       res.status(400).send(response)
   }},
     submitCode: async(req,res) =>{
       try {
-        let qry = '';
+
+        let username = req.body.username;
+        let fullName = req.body.fullName;
+        let namaKKA = req.body.namaKKA;
+        let qry = 'INSERT INTO';
         let hasil = await connection.execQry(qry)
            let response = {
             code: 200,
