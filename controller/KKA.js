@@ -35,45 +35,88 @@ let KKA = {
               res.status(400).send(response)
         }
     },
-    getCode : async(req, res)=>{
+    PopInsert : async(req, res)=>{
       try {
           let dateNow = timeSetting.getCurrentTime()
-          let username = req.body.username
+          let codeKKA = req.body.codeKKA
           let persembahanGereja = req.body.persembahanGereja
           let kasKKA = req.body.kasKKA
-        let qry = `SELECT a.username, a.fullName, b.codeKKA, b.nama, 
-        b.wilayah
-         FROM user a
-        INNER JOIN kka b ON a.codeKKA = b.codeKKA
-        WHERE a.username = '${username}'`;
+          let tempat = req.body.tempat
+          let nextPW = req.body.nextPW
+          let nextSharing = req.body.nextSharing
+          let mempersiapkan = req.body.mempersiapkan
 
-        let hasil = await connection.execQry(qry)
-console.log(hasil);
+          
+       // let qry = `SELECT a.username, a.fullName, b.codeKKA, b.nama, 
+      //   b.wilayah
+      //    FROM user a
+      //   INNER JOIN kka b ON a.codeKKA = b.codeKKA
+      //   WHERE a.username = '${username}'`;
 
-        let insertQry = `INSERT INTO kkaReport (codeKKA, waktu, tempat, persembahanGereja, kasKKA)
-        VALUES ('${hasil[0].codeKKA}', '${hasil[0].dateNow}', '${hasil[0].wialyah}', '${hasil[0].persembahanGereja}', ${hasil[0].kasKKA})`
+      //   let hasil = await connection.execQry(qry)
+      //   console.log(hasil);
+
+      //   if (hasil.length === 0) {
+      //       let response = {
+      //       code: 400,
+      //       message: 'error',
+      //       data: 'username tidak ditemukan'
+      //     };
+      // return  res.status(400).send(response)
+          
+      //   }
+
+        let insertQry = `INSERT INTO kkaReport (codeKKA, waktu, tempat, persembahanGereja, kasKKA, nextPW, nextSharing, mempersiapkan)
+        VALUES ('${codeKKA}', '${dateNow}', '${tempat}', '${persembahanGereja}', ${kasKKA}, '${nextPW}', '${nextSharing}', '${mempersiapkan}')`
         
         let hasilInsert = await connection.execQry(insertQry);
-        
         console.log(hasilInsert);
-        //  let response = {
-          //   code: 200,
-          //   message: 'success',
-          //   data: hasil
-          // };
-  //        console.log(response)
-          res.status(200).send(response)
-    return hasil
-    } catch (error) {
-  //     console.log(error);
-  //     let response = {
-  //         code: hasil.code,
-  //         message: hasil.message,
-  //         error:error
-  //       };
-  //       res.status(400).send(response)
+         let response = {
+            code: 201,
+            message: 'success',
+            data: "data berhasil masuk"
+          };
+         console.log(response)
+      return res.status(201).send(response)
+    } catch (e) {
+      console.log(e);
+      let response = {
+          code: 400,
+          message: 'error',
+          error:e
+        };
+       return res.status(400).send(response)
   }},
-    submitCode: async(req,res) =>{
+  scanQR : async (req, res) =>{
+try {
+        let username = req.body.username;
+        let fullName = req.body.fullName;
+        let codeKKA = req.body.codeKKA;
+        let dateNow = timeSetting.getCurrentTime();
+        let qry = `INSERT INTO kkaAbsen (username, fullname, codeKKA, datetime)
+        VALUES ('${username}', ${fullName}, ${codeKKA}, ${dateNow})`;
+
+        let hasil = await connection.execQry(qry);
+        console.log(hasil);
+        let response = {
+           code: 201,
+           message: 'success',
+           data: "data berhasil masuk"
+         };
+        console.log(response)
+     return res.status(201).send(response)
+        
+      } catch (e) {
+        let response = {
+           code: 400,
+           message: 'error',
+           data:e
+         };
+        console.log(response)
+     return res.status(400).send(response)
+}
+  }, 
+    generateLaporan: async(req,res) =>{
       try {
 
         let username = req.body.username;
@@ -89,12 +132,12 @@ console.log(hasil);
          console.log(response)
           res.status(200).send(response)
     return hasil
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      console.log(e);
       let response = {
-          code: hasil.code,
-          message: hasil.message,
-          error:error
+          code: 400,
+          message: 'error',
+          error:e
         };
         res.status(400).send(response)
   }

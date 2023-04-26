@@ -78,8 +78,8 @@ router.post('/cbn/v1/verse/addVerse', verikasi.validation(), verse.addVerse );
 // //cbn KKA
 router.get('/cbn/v1/KKA/getListKKA', verikasi.validation(),kka.getListKKA );
 router.post('/cbn/v1/KKA/registrasiKKA', kka.registrasiKKA );
-router.post('/cbn/v1/KKA/absen/getCode',kka.getCode);
-router.post('/cbn/v1/KKA/absen/submitCode',verikasi.validation(), kka.submitCode);
+router.post('/cbn/v1/KKA/absen/PopInsert',kka.PopInsert);
+// router.post('/cbn/v1/KKA/absen/submitCode',verikasi.validation(), kka.);
 
 
 
