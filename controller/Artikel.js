@@ -1,11 +1,12 @@
  'use strict';
-// let connection = require('../config/Mongodb/Mongodb');
-const moment = require('moment')
+ const connection = require('../config/MySQL');
+ const moment = require('moment')
 let dotenv = require('dotenv');
 let env = dotenv.config();
 const mongodb = require('mongodb');
 const MongoClient = require("mongodb").MongoClient;
 const client = new MongoClient(process.env.URI);
+
 const path = require('path')
 const fs = require('fs')
         function getFullTime() {
@@ -14,11 +15,12 @@ const fs = require('fs')
                 });
             console.log(asiaTimeStart);
             let time = moment(asiaTimeStart, "MM/DD/YYYY").format(
-                  "DD-MM-YYYY"
+                  "YYYY-MM-DD"
                 );
             console.log(time);
                 return time;
-              }      
+              }   
+  
                    
 let artikel = {
 
@@ -34,6 +36,7 @@ let artikel = {
         })
         
         const db = client.db('MyCBN');
+        console.log('db',db);
         const collection = db.collection('article')
         let result = await collection.find({}).toArray();
         let response = {
@@ -52,19 +55,12 @@ let artikel = {
         res.status(500).send(error)
       }
     },
-    getDataArtikel: async(req, res)=>{
+    getDataByKategori: async(req, res)=>{
+      let kategori = req.body.kategori;
       try {
-        await client.connect()
-        .then( () => {
-        console.log('Connected to the database ')
-      })
-        .catch( (err) => {
-        console.error(`Error connecting to the database. ${err}`);
-      })
+       let qry = `SELECT * FROM artikel WHERE kategori = '${kategori}'`
+       let result = await connection.execQry(qry);
 
-      const db = client.db('MyCBN');
-      const collection = db.collection('article')
-      let result = await collection.find({kategori : 'artikel'}).toArray();
       if (0 < result.length) {
         let response = {
           code: 200,
@@ -220,10 +216,10 @@ let artikel = {
                     res.status(400).send(response);
                     return response;
                   }
-              let waktuPembuatan = getFullTime();
+              // let waktuPembuatan = getFullTime();
 
               let image = req.files.image;
-              console.log(image);
+              console.log("img",image);
               let filesize = image.size;
               let ext = path.extname(image.name);
               let filename = image.md5 + ext;
@@ -253,35 +249,20 @@ let artikel = {
                 }
 
                 try {
-                  await client.connect()
-                  .then( () => {
-                  console.log('Connected to the database ')
-                })
-                  .catch( (err) => {
-                  console.error(`Error connecting to the database. ${err}`);
-                })
+               
         
-                const db = client.db('MyCBN');
-                const collection = db.collection('article')
-                let objectArticle = {
-                  judulArtikel : `${judulArtikel}`,
-                  isiArtikel : `${isiArtikel}`,
-                  kategori : `${kategori}`,
-                  tag : `${tag}`,
-                  waktuPembuatan : `${waktuPembuatan}`,
-                  image : `${filename}`,
-                  url: `${url}`
-        
-                }
-                // console.log(objectArticle);
-                let result = await collection.insertOne(objectArticle);
-                let response = {
-                          code: 200,
-                          message: 'success',
-                          data:result
-                        };
-                        res.status(200).send(response)
-              
+                let insertQry = `INSERT INTO artikel (judulArtikel, isiArtikel, kategori, tag, waktuPembuatan, image, url )
+                VALUES ('${judulArtikel}', '${isiArtikel}', '${kategori}', '${tag}', '${getFullTime()}', '${filename}', '${url}')`
+                
+                let hasilInsert = await connection.execQry(insertQry);
+                console.log("hasilInsert",hasilInsert);
+                 let response = {
+                    code: 201,
+                    message: 'success',
+                    data: "data berhasil masuk"
+                  };
+                 console.log(response)
+              return res.status(201).send(response)
         
                 } catch(err){
                   console.log(err);

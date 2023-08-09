@@ -48,8 +48,8 @@ router.post('/cbn/v1/admin/login', admin.login);
 // router.post('/cbn/v1/pastoral/pelayananKonseling', pastoral.getbyUser);
 
 // //cbn ARTIKEL
-router.get('/cbn/v1/artikel/getAllArticle',verikasi.validation(), artikel.getAllData );
-router.get('/cbn/v1/artikel/getDataArtikel',verikasi.validation(), artikel.getDataArtikel );
+router.get('/cbn/v1/artikel/getAllArticle', artikel.getAllData );
+router.post('/cbn/v1/artikel/getDataByKategori', artikel.getDataByKategori );
 router.post('/cbn/v1/artikel/getOneDetail',verikasi.validation(), artikel.getOneDetail );
 router.get('/cbn/v1/artikel/getDataRenungan',verikasi.validation(), artikel.getDataRenungan );
 router.post('/cbn/v1/artikel/addOneArticle',verikasi.validation(), artikel.addArtikel );
@@ -57,7 +57,7 @@ router.post('/cbn/v1/artikel/addOneArticle',verikasi.validation(), artikel.addAr
 router.post('/cbn/v1/artikel/deleteOneArticle', verikasi.validation(), artikel.deleteOneData );
 
 // Verse
-router.get('/cbn/v1/verse/getVerse', verikasi.validation(), verse.getVerse );
+router.get('/cbn/v1/verse/getVerse', verse.getVerse );
 router.post('/cbn/v1/verse/addVerse', verikasi.validation(), verse.addVerse );
 
 // // cbn GET Renungan
@@ -79,6 +79,10 @@ router.post('/cbn/v1/verse/addVerse', verikasi.validation(), verse.addVerse );
 router.get('/cbn/v1/KKA/getListKKA', verikasi.validation(),kka.getListKKA );
 router.post('/cbn/v1/KKA/registrasiKKA', kka.registrasiKKA );
 router.post('/cbn/v1/KKA/absen/PopInsert',kka.PopInsert);
+router.post('/cbn/v1/KKA/absen/insertLaporan',kka.insertLaporan);
+router.post('/cbn/v1/KKA/absen/insertLaporanKeuangan',kka.insertLaporanKeuangan);
+router.post('/cbn/v1/KKA/absen/insertLaporanNextAgenda',kka.insertLaporanNextAgenda);
+
 // router.post('/cbn/v1/KKA/absen/submitCode',verikasi.validation(), kka.);
 
 

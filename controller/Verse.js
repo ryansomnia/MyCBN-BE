@@ -28,17 +28,9 @@ let verse = {
     getVerse: async(req, res)=>{
       try {       
 
-        await client.connect()
-        .then( () => {
-        console.log('Connected to the database ')
-      })
-        .catch( (err) => {
-        console.error(`Error connecting to the database. ${err}`);
-      })
-      
-      const db = client.db('MyCBN');
-      const collection = db.collection('verse')
-      let result = await collection.aggregate([{$sample:{size:1}}]).toArray();
+       
+     let qry = `SELECT * FROM verse ORDER BY RAND() LIMIT 1;`
+      let result = await await connection.execQry(qry);
       console.log(result);
       let response = {
                 code: 200,
