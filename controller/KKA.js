@@ -2,6 +2,9 @@ const connection = require("../config/MySQL");
 const timeSetting = require("../helpers/timeSetting");
 let dotenv = require("dotenv");
 let env = dotenv.config();
+const path = require("path");
+const fs = require("fs");
+const moment = require("moment");
 
 let checknumber = (data) => {
   let reg = new RegExp("^[0-9]+$");
@@ -11,6 +14,16 @@ let checknumber = (data) => {
     return false;
   }
 };
+
+function getFullTime() {
+  let asiaTimeStart = new Date().toLocaleString("en-US", {
+    timeZone: "Asia/Jakarta",
+  });
+  console.log(asiaTimeStart);
+  let time = moment(asiaTimeStart, "MM/DD/YYYY").format("YYYY-MM-DD");
+  console.log(time);
+  return time;
+}
 
 let KKA = {
   getListKKA: async (req, res) => {
@@ -401,6 +414,83 @@ let KKA = {
       res.status(500).send(response);
     }
   },
+  uploadBahanSharing: async (req, res) => {
+    let judulMateri = req.body.judulMateri;
+    if (judulMateri == 0 || judulMateri == null) {
+      let response = {
+        code: 400,
+        message: "Error",
+        error: "judulMateri tidak terisi",
+      };
+      res.status(400).send(response);
+      return response;
+    }
+
+    let file = req.files.file;
+    console.log("file", file);
+    let filesize = file.size;
+    console.log("=================filesize===================");
+    console.log(filesize);
+    console.log("====================================");
+    let ext = path.extname(file.name);
+    console.log("================ext====================");
+    console.log(ext);
+    console.log("====================================");
+    let filename = file.md5 + ext;
+    console.log("=================filename===================");
+    console.log(filename);
+    console.log("====================================");
+    const url = `${req.protocol}://${req.get("host")}/fileSharing/${filename}`;
+    let allowedType = [".pdf", ".doc", ".docx"];
+
+    if (!allowedType.includes(ext.toLowerCase())) {
+      return res.status(422).json({ msg: "invalid Document" });
+    }
+    if (filesize > 5000000) {
+      return res.status(422).json({ msg: " Size overload" });
+    }
+
+    if (file == 0 || file == null) {
+      let response = {
+        code: 400,
+        message: "Error",
+        error: "articlefile   tidak terisi",
+      };
+      res.status(400).send(response);
+      return response;
+    }
+
+    file.mv(`./public/fileSharing/${filename}`, async (err) => {
+      if (err) {
+        return res.status(500).json({ msg: err.message });
+      }
+
+      try {
+        let insertQry = `INSERT INTO materiKKA (judulMateri, waktuPembuatan, url)
+                VALUES ('${judulMateri}','${getFullTime()}', '${url}')`;
+
+        let hasilInsert = await connection.execQry(insertQry);
+        console.log("hasilInsert", hasilInsert);
+        let response = {
+          code: 201,
+          message: "success",
+          data: "data berhasil masuk",
+        };
+        console.log(response);
+        return res.status(201).send(response);
+      } catch (err) {
+        console.log(err);
+        let response = {
+          code: 500,
+          message: "error",
+          error: err,
+        };
+        res.status(500).send(response);
+      }
+    });
+
+    //
+  }
 };
 
 module.exports = KKA;

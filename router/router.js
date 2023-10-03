@@ -82,6 +82,8 @@ router.post('/cbn/v1/KKA/absen/PopInsert',kka.PopInsert);
 router.post('/cbn/v1/KKA/absen/insertLaporan',kka.insertLaporan);
 router.post('/cbn/v1/KKA/absen/insertLaporanKeuangan',kka.insertLaporanKeuangan);
 router.post('/cbn/v1/KKA/absen/insertLaporanNextAgenda',kka.insertLaporanNextAgenda);
+router.post('/cbn/v1/KKA/materiKKA/upload',verikasi.validation(), kka.uploadBahanSharing );
+
 
 // router.post('/cbn/v1/KKA/absen/submitCode',verikasi.validation(), kka.);
 
