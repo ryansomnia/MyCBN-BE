@@ -1,68 +1,71 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const app = express();
 const cors = require('cors');
-const ejs = require('ejs');
-const FileUpload = require('express-fileupload')
-// const newrelic = require('newrelic');
-//setting cors
-app.options('*', cors());
+const dotenv = require('dotenv');
+const fileUpload = require('express-fileupload');
+const ip = require('ip');
 
-app.use(express.static('public'));
-app.use(FileUpload());
-let dotenv = require('dotenv');
-let env = dotenv.config();
+dotenv.config();
+
+const app = express();
+
+// Middleware
+app.use(cors());
+app.options('*', cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.use(fileUpload());
 
-
-//Static Files
-app.use('/css', express.static(__dirname + 'public/css'))
-
-//Set Templating Engine
-app.set(ejs)
-app.set('view engine', 'ejs')
-
-
-// Navigation 
-app.get('', (req,res) => {
-    res.render('index')
-})
-
-app.use(cors());
+app.use(express.static('public'));
 
 app.use(morgan('dev'));
 
+// Health Check
+app.get('/', (req, res) => {
+    return res.status(200).json({
+        success: true,
+        service: 'GPPK API',
+        status: 'running',
+        port: process.env.PORT,
+        timestamp: new Date()
+    });
+});
+
+// CORS Headers
 app.all('/*', function (req, res, next) {
- 
-    // CORS headers
-    res.header("Access-Control-Allow-Origin", "*"); // restrict it to the required domain
-    res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-    // Set custom headers for CORS
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With,Content-Type,Accept,X-Access-Token,X-Key');
-    if (req.method == 'OPTIONS') {
-      res.status(200).end();
-    } else {
-      next();
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+    res.header(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, X-Access-Token, X-Key'
+    );
+
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
     }
-  });
 
-app.use('/', require('./router/router'))
-app.use(function (req, res, next) {
-    console.log(req.header);
-    let ress = {
-        code: '404',
-        message: "Failed, URL tidak ditemukan",
-    }
-    res.status(404).send(ress);
-  });
-  
+    next();
+});
 
+// Router
+app.use('/', require('./router/router'));
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server running in ${process.env.PORT}`);
+// 404 Handler
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        code: 404,
+        message: 'URL tidak ditemukan'
+    });
+});
 
-})
+const PORT = process.env.PORT || 5001;
+const localIPAddress = ip.address();
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Local IP Address: ${localIPAddress}`);
+});

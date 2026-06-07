@@ -22,33 +22,26 @@ function getFullTime() {
 let artikel = {
   getAllData: async (req, res) => {
     try {
-      await client
-        .connect()
-        .then(() => {
-          console.log("Connected to the database ");
-        })
-        .catch((err) => {
-          console.error(`Error connecting to the database. ${err}`);
-        });
+      let qry = "SELECT * FROM artikel";
+      let hasil = await connection.execQry(qry);
 
-      const db = client.db("MyCBN");
-      console.log("db", db);
-      const collection = db.collection("article");
-      let result = await collection.find({}).toArray();
+      console.log(hasil);
       let response = {
         code: 200,
         message: "success",
-        data: result,
+        data: hasil,
       };
+      console.log(response);
       res.status(200).send(response);
-    } catch (err) {
-      let error = {
-        code: 500,
-        message: "error",
-        error: err,
-      };
+      return hasil;
+    } catch (error) {
       console.log(error);
-      res.status(500).send(error);
+      let response = {
+        code: hasil.code,
+        message: hasil.message,
+        error: error,
+      };
+      res.status(400).send(response);
     }
   },
   getDataByKategori: async (req, res) => {
@@ -342,43 +335,66 @@ let artikel = {
   },
   deleteOneData: async (req, res) => {
     let id = req.body.id;
-    console.log(id);
     try {
-      await client
-        .connect()
-        .then(() => {
-          console.log("Connected to the database ");
-        })
-        .catch((err) => {
-          console.error(`Error connecting to the database. ${err}`);
-        });
-
-      const db = client.db("MyCBN");
-      const collection = db.collection("article");
-      let data = await collection.findOne({ _id: new mongodb.ObjectId(id) });
-      const filePath = `./public/images/${data.image}`;
-      fs.unlinkSync(filePath);
-      let result = await collection.deleteOne({
-        _id: new mongodb.ObjectId(id),
+      // Query to get the URL of the file you want to delete
+      let urlQuery = `SELECT image FROM artikel WHERE idArtikel = '${id}'`;
+      let urlResult = await connection.execQry(urlQuery);
+      const fileURL = urlResult[0].image;
+      console.log(fileURL);
+  
+      // Deleting the file
+      const filePath = path.join(__dirname, '..', 'public', 'images', fileURL);
+  
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.log(err);
+          let response = {
+            code: 400,
+            message: "File deletion failed",
+            error: err,
+          };
+          res.status(400).send(response);
+        } else {
+          console.log(`File ${fileURL} has been deleted`);
+  
+          // Delete the record from the database
+          let deleteQuery = `DELETE FROM artikel WHERE idArtikel = '${id}'`;
+          connection
+            .execQry(deleteQuery)
+            .then((result) => {
+              console.log(result);
+              let response = {
+                code: 200,
+                message: "File and record deleted successfully",
+                data: result,
+              };
+              res.status(200).send(response);
+            })
+            .catch((error) => {
+              console.log(error);
+              let response = {
+                code: 400,
+                message: "Database record deletion failed",
+                error: error,
+              };
+              res.status(400).send(response);
+            });
+        }
       });
-      if (0 < result.deletedCount) {
-        let response = {
-          code: 200,
-          message: "success delete",
-          data: result,
-        };
-        res.status(200).send(response);
-      } else {
-        let response = {
-          code: 401,
-          message: "cant delete",
-        };
-        res.status(401).send(response);
-      }
+  
+      // Response should not be here
+      return;
     } catch (error) {
       console.log(error);
+      let response = {
+        code: 400,
+        message: "error",
+        error: error.message,
+      };
+      res.status(400).send(response);
     }
   },
+  
   // editOneData : async(req, res) =>{
 
   // }

@@ -23,6 +23,7 @@ exports.execSP = async (query) => {
                     if (err) {
                         let response = {
                             code: 500,
+                            status:'Internal Server Error',
                             message : err
                         }
                         return response
@@ -32,10 +33,15 @@ exports.execSP = async (query) => {
                     connect.query(query, function (error, result, rows, fields) {
                         connect.end();
                         if (error) {
-                            console.log("err",error);
-                            throw error;
+                            let err = {
+                                code: 500,
+                                status:'Internal Server Error',
+                                message : error.sqlMessage
+                            }
+                            return resolve(err);
+                             
+                            // throw error;
                         } else {
-                            // console.log("rrr",result[0][0].code);
                             return resolve(result[0][0]);
                          
                         }
@@ -81,6 +87,7 @@ exports.execQry = async (query) => {
                     if (err) {
                         let response = {
                             code: 500,
+                            status:'Internal Server Error',
                             message : err
                         }
                         return response
@@ -105,6 +112,7 @@ exports.execQry = async (query) => {
                 console.log('failed connect')
                 let response = {
                     code: 500,
+                    status:'Internal Server Error',
                     message : 'error connect'
                 }
                 return response
